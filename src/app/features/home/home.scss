@@ -18,6 +18,16 @@
   flex: 1 1 auto;
 }
 
+.hola {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.btn-ingresar {
+  background: #fff;
+  color: var(--fs-green-700);
+}
+
 .fs-main {
   max-width: 960px;
   margin: 0 auto;
