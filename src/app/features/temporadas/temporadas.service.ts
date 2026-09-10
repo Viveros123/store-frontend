@@ -40,6 +40,13 @@ export class TemporadasService {
   }
 
   // --- Colecciones ---
+  opcionesColecciones(temporadaId?: number): Observable<Coleccion[]> {
+    let params = new HttpParams();
+    if (temporadaId != null) params = params.set('temporada_id', temporadaId);
+    return this.http.get<Coleccion[]>(`${this.base}/colecciones/opciones`, {
+      params,
+    });
+  }
   listarColecciones(
     q: string,
     temporadaId: number | null,

@@ -67,6 +67,20 @@ export const routes: Routes = [
             (m) => m.TemporadasPage,
           ),
       },
+      {
+        path: 'productos',
+        loadComponent: () =>
+          import('./features/productos/productos-page').then(
+            (m) => m.ProductosPage,
+          ),
+      },
+      {
+        path: 'productos/:id',
+        loadComponent: () =>
+          import('./features/productos/producto-detalle-page').then(
+            (m) => m.ProductoDetallePage,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

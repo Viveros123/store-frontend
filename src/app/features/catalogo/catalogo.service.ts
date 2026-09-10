@@ -11,6 +11,17 @@ export class CatalogoService {
   private readonly http = inject(HttpClient);
   private readonly base = environment.apiUrl;
 
+  // --- Opciones (para selects) ---
+  opcionesCategorias(): Observable<Categoria[]> {
+    return this.http.get<Categoria[]>(`${this.base}/categorias/opciones`);
+  }
+  opcionesTallas(): Observable<Talla[]> {
+    return this.http.get<Talla[]>(`${this.base}/tallas/opciones`);
+  }
+  opcionesColores(): Observable<Color[]> {
+    return this.http.get<Color[]>(`${this.base}/colores/opciones`);
+  }
+
   // --- Categorías ---
   listarCategorias(q: string, page: number, size: number): Observable<Page<Categoria>> {
     let params = new HttpParams().set('page', page).set('size', size);
