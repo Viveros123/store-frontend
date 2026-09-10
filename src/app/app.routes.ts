@@ -53,6 +53,13 @@ export const routes: Routes = [
             (m) => m.ProveedoresPage,
           ),
       },
+      {
+        path: 'catalogo-base',
+        loadComponent: () =>
+          import('./features/catalogo/catalogo-base-page').then(
+            (m) => m.CatalogoBasePage,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
