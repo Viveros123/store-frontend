@@ -95,6 +95,18 @@ table {
   color: #64748b;
 }
 
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 12px;
+  background: #fff7ed;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+  font-size: 0.9rem;
+}
+
 @media (max-width: 560px) {
   .grid {
     grid-template-columns: 1fr;

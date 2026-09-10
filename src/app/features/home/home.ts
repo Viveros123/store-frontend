@@ -25,6 +25,7 @@ export class Home {
 
   protected readonly usuario = this.auth.user;
   protected readonly esAdmin = () => this.auth.hasRole(ROL.ADMIN);
+  protected readonly esProveedor = () => this.auth.hasRole(ROL.PROVEEDOR);
 
   salir(): void {
     this.auth.logout();

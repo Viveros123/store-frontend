@@ -16,10 +16,13 @@ import { Color, Talla } from '../../core/models/catalogo.model';
 import { Variante } from '../../core/models/producto.model';
 import { CatalogoService } from '../catalogo/catalogo.service';
 import { ProductosService } from './productos.service';
+import { PortalProveedorService } from '../portal-proveedor/portal-proveedor.service';
 
 export interface VarianteDialogData {
   productoId: number;
   variante: Variante | null;
+  /** Si es true usa los endpoints del portal del proveedor. */
+  portal?: boolean;
 }
 
 @Component({
@@ -95,10 +98,15 @@ export interface VarianteDialogData {
 })
 export class VarianteDialog {
   private readonly fb = inject(FormBuilder);
-  private readonly service = inject(ProductosService);
+  private readonly adminSvc = inject(ProductosService);
+  private readonly portalSvc = inject(PortalProveedorService);
   private readonly catalogo = inject(CatalogoService);
   protected readonly ref = inject(MatDialogRef<VarianteDialog, Variante>);
   protected readonly data = inject<VarianteDialogData>(MAT_DIALOG_DATA);
+
+  private get service() {
+    return this.data.portal ? this.portalSvc : this.adminSvc;
+  }
 
   protected readonly tallas = toSignal(this.catalogo.opcionesTallas(), {
     initialValue: [] as Talla[],

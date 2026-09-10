@@ -1,6 +1,11 @@
 import { Routes } from '@angular/router';
 
-import { adminGuard, authGuard, noAuthGuard } from './core/auth/auth.guard';
+import {
+  adminGuard,
+  authGuard,
+  noAuthGuard,
+  proveedorGuard,
+} from './core/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -24,6 +29,31 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./features/identidad/mi-cuenta/mi-cuenta').then((m) => m.MiCuenta),
+  },
+  {
+    path: 'proveedor',
+    canActivate: [proveedorGuard],
+    loadComponent: () =>
+      import('./features/portal-proveedor/proveedor-layout').then(
+        (m) => m.ProveedorLayout,
+      ),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'productos' },
+      {
+        path: 'productos',
+        loadComponent: () =>
+          import('./features/portal-proveedor/mis-productos-page').then(
+            (m) => m.MisProductosPage,
+          ),
+      },
+      {
+        path: 'productos/:id',
+        loadComponent: () =>
+          import('./features/portal-proveedor/mi-producto-detalle-page').then(
+            (m) => m.MiProductoDetallePage,
+          ),
+      },
+    ],
   },
   {
     path: 'admin',

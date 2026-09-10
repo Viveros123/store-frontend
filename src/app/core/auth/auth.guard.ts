@@ -26,6 +26,17 @@ export const adminGuard: CanActivateFn = (_route, state) => {
   });
 };
 
+/** Requiere rol Proveedor (portal del proveedor). */
+export const proveedorGuard: CanActivateFn = (_route, state) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  if (auth.hasRole(ROL.PROVEEDOR)) return true;
+  if (auth.isAuthenticated()) return router.createUrlTree(['/']);
+  return router.createUrlTree(['/ingresar'], {
+    queryParams: { returnUrl: state.url },
+  });
+};
+
 /** Para login/registro: si ya hay sesión, no tiene sentido mostrarlos. */
 export const noAuthGuard: CanActivateFn = () => {
   const auth = inject(AuthService);

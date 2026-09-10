@@ -9,6 +9,9 @@
     @if (esAdmin()) {
       <button mat-button routerLink="/admin">Panel de administración</button>
     }
+    @if (esProveedor()) {
+      <button mat-button routerLink="/proveedor">Portal de proveedores</button>
+    }
 
     <button mat-button [matMenuTriggerFor]="cuenta" class="cuenta-btn">
       <mat-icon>account_circle</mat-icon>
@@ -51,6 +54,8 @@
         Sesión iniciada como <strong>{{ u.rol }}</strong>.
         @if (esAdmin()) {
           Entrá al <a routerLink="/admin">panel de administración</a>.
+        } @else if (esProveedor()) {
+          Entrá al <a routerLink="/proveedor">portal de proveedores</a> para registrar tus productos.
         } @else {
           Las pantallas para tu rol se habilitan en los próximos casos de uso.
         }

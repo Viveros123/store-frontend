@@ -52,14 +52,18 @@ export class Login {
       const { email, password } = this.form.getRawValue();
       const usuario = await this.auth.login(email, password);
       const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-      const destino =
-        returnUrl ?? (usuario.rol === ROL.ADMIN ? '/admin/usuarios' : '/');
-      await this.router.navigateByUrl(destino);
+      await this.router.navigateByUrl(returnUrl ?? this.inicioSegunRol(usuario.rol));
     } catch (e: unknown) {
       this.error.set(this.mensajeError(e));
     } finally {
       this.cargando.set(false);
     }
+  }
+
+  private inicioSegunRol(rol: string | null): string {
+    if (rol === ROL.ADMIN) return '/admin/usuarios';
+    if (rol === ROL.PROVEEDOR) return '/proveedor/productos';
+    return '/';
   }
 
   private mensajeError(e: unknown): string {
