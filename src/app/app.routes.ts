@@ -13,6 +13,11 @@ export const routes: Routes = [
       import('./features/identidad/login/login').then((m) => m.Login),
   },
   {
+    path: 'registro',
+    loadComponent: () =>
+      import('./features/identidad/registro/registro').then((m) => m.Registro),
+  },
+  {
     path: 'admin',
     canActivate: [adminGuard],
     loadComponent: () =>

@@ -13,6 +13,14 @@ interface LoginResponse {
   usuario: Usuario;
 }
 
+export interface RegistroClienteDto {
+  nombre: string;
+  apellido: string;
+  email: string;
+  password: string;
+  telefono?: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
@@ -37,6 +45,16 @@ export class AuthService {
       this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, body.toString(), {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       }),
+    );
+    this.tokens.set(res.access_token);
+    this._user.set(res.usuario);
+    return res.usuario;
+  }
+
+  /** CU1 — registro de cliente. Deja la sesión iniciada. */
+  async register(dto: RegistroClienteDto): Promise<Usuario> {
+    const res = await firstValueFrom(
+      this.http.post<LoginResponse>(`${environment.apiUrl}/auth/registro`, dto),
     );
     this.tokens.set(res.access_token);
     this._user.set(res.usuario);
