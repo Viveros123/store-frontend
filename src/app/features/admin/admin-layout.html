@@ -20,6 +20,9 @@
       <small>{{ usuario()?.email }}</small>
       <small class="rol">{{ usuario()?.rol }}</small>
     </div>
+    <button mat-menu-item routerLink="/mi-cuenta">
+      <mat-icon>person</mat-icon> Mi cuenta
+    </button>
     <button mat-menu-item (click)="salir()">
       <mat-icon>logout</mat-icon> Cerrar sesión
     </button>

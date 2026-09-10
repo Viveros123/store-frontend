@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { adminGuard } from './core/auth/auth.guard';
+import { adminGuard, authGuard, noAuthGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -9,13 +9,21 @@ export const routes: Routes = [
   },
   {
     path: 'ingresar',
+    canActivate: [noAuthGuard],
     loadComponent: () =>
       import('./features/identidad/login/login').then((m) => m.Login),
   },
   {
     path: 'registro',
+    canActivate: [noAuthGuard],
     loadComponent: () =>
       import('./features/identidad/registro/registro').then((m) => m.Registro),
+  },
+  {
+    path: 'mi-cuenta',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/identidad/mi-cuenta/mi-cuenta').then((m) => m.MiCuenta),
   },
   {
     path: 'admin',

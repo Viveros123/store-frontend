@@ -21,6 +21,17 @@ export interface RegistroClienteDto {
   telefono?: string | null;
 }
 
+export interface MiCuentaDto {
+  nombre?: string;
+  apellido?: string;
+  telefono?: string | null;
+}
+
+export interface CambioPasswordDto {
+  password_actual: string;
+  password_nueva: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
@@ -73,6 +84,22 @@ export class AuthService {
       this.tokens.clear();
       this._user.set(null);
     }
+  }
+
+  /** CU2 — actualiza los datos propios. */
+  async updateProfile(dto: MiCuentaDto): Promise<Usuario> {
+    const u = await firstValueFrom(
+      this.http.patch<Usuario>(`${environment.apiUrl}/auth/me`, dto),
+    );
+    this._user.set(u);
+    return u;
+  }
+
+  /** CU2 — cambia la propia contraseña. */
+  async changePassword(dto: CambioPasswordDto): Promise<void> {
+    await firstValueFrom(
+      this.http.post(`${environment.apiUrl}/auth/cambiar-password`, dto),
+    );
   }
 
   logout(): void {

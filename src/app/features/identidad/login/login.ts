@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -30,6 +30,7 @@ export class Login {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly cargando = signal(false);
   protected readonly error = signal<string | null>(null);
@@ -50,7 +51,9 @@ export class Login {
     try {
       const { email, password } = this.form.getRawValue();
       const usuario = await this.auth.login(email, password);
-      const destino = usuario.rol === ROL.ADMIN ? '/admin/usuarios' : '/';
+      const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+      const destino =
+        returnUrl ?? (usuario.rol === ROL.ADMIN ? '/admin/usuarios' : '/');
       await this.router.navigateByUrl(destino);
     } catch (e: unknown) {
       this.error.set(this.mensajeError(e));
