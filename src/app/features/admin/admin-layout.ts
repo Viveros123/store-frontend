@@ -55,6 +55,7 @@ export class AdminLayout {
     { label: 'Sucursales', icon: 'store', link: '/admin/sucursales' },
     { label: 'Proveedores', icon: 'local_shipping', link: '/admin/proveedores' },
     { label: 'Datos del catálogo', icon: 'sell', link: '/admin/catalogo-base' },
+    { label: 'Temporadas y colecciones', icon: 'calendar_month', link: '/admin/temporadas' },
   ];
 
   alternar(): void {

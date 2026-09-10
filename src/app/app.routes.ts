@@ -60,6 +60,13 @@ export const routes: Routes = [
             (m) => m.CatalogoBasePage,
           ),
       },
+      {
+        path: 'temporadas',
+        loadComponent: () =>
+          import('./features/temporadas/temporadas-page').then(
+            (m) => m.TemporadasPage,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
