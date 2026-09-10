@@ -3,18 +3,30 @@ import { RouterLink } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { AuthService } from '../../core/auth/auth.service';
 import { ROL } from '../../core/models/usuario.model';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, MatToolbarModule, MatButtonModule, MatIconModule],
+  imports: [
+    RouterLink,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+  ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
   private readonly auth = inject(AuthService);
+
   protected readonly usuario = this.auth.user;
   protected readonly esAdmin = () => this.auth.hasRole(ROL.ADMIN);
+
+  salir(): void {
+    this.auth.logout();
+  }
 }

@@ -4,6 +4,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  gap: 0.25rem;
 }
 
 .fs-brand {
@@ -18,14 +19,28 @@
   flex: 1 1 auto;
 }
 
-.hola {
-  font-size: 0.9rem;
-  opacity: 0.9;
+.cuenta-btn {
+  color: #fff;
 }
 
 .btn-ingresar {
   background: #fff;
   color: var(--fs-green-700);
+}
+
+.menu-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eef2f7;
+
+  small {
+    color: #64748b;
+  }
+  .rol {
+    color: var(--fs-green-700);
+  }
 }
 
 .fs-main {
@@ -56,5 +71,16 @@
     margin-top: 1rem;
     font-size: 0.85rem;
     color: var(--fs-green-700);
+
+    a {
+      color: var(--fs-green-700);
+      font-weight: 600;
+    }
+  }
+}
+
+@media (max-width: 599px) {
+  .hide-xs {
+    display: none;
   }
 }
