@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { firstValueFrom } from 'rxjs';
 import {
   MAT_DIALOG_DATA,
@@ -13,13 +14,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
-import { Rol, Usuario } from '../../../core/models/usuario.model';
+import { ROL, Rol, Usuario } from '../../../core/models/usuario.model';
+import { SucursalOpcion } from '../../../core/models/sucursal.model';
+import { SucursalesService } from '../../sucursales/sucursales.service';
 import { UsuariosService } from './usuarios.service';
 
 export interface UsuarioFormData {
   usuario: Usuario | null;
   roles: Rol[];
 }
+
+/** Roles que pertenecen a una sucursal. */
+const ROLES_CON_SUCURSAL: string[] = [ROL.CAJERO, ROL.ENCARGADO];
 
 @Component({
   selector: 'app-usuario-form-dialog',
@@ -39,6 +45,7 @@ export interface UsuarioFormData {
 export class UsuarioFormDialog {
   private readonly fb = inject(FormBuilder);
   private readonly service = inject(UsuariosService);
+  private readonly sucursalesService = inject(SucursalesService);
   private readonly ref = inject(MatDialogRef<UsuarioFormDialog, Usuario>);
   protected readonly data = inject<UsuarioFormData>(MAT_DIALOG_DATA);
 
@@ -46,14 +53,29 @@ export class UsuarioFormDialog {
   protected readonly guardando = signal(false);
   protected readonly error = signal<string | null>(null);
 
+  protected readonly sucursales = toSignal(this.sucursalesService.opciones(), {
+    initialValue: [] as SucursalOpcion[],
+  });
+
   protected readonly form = this.fb.nonNullable.group({
     nombre: [this.data.usuario?.nombre ?? '', [Validators.required, Validators.minLength(2)]],
     apellido: [this.data.usuario?.apellido ?? '', [Validators.required, Validators.minLength(2)]],
     email: [this.data.usuario?.email ?? '', [Validators.required, Validators.email]],
     telefono: [this.data.usuario?.telefono ?? ''],
     rol_id: [this.data.usuario?.rol_id ?? (null as number | null), [Validators.required]],
+    sucursal_id: [this.data.usuario?.sucursal_id ?? (null as number | null)],
     password: ['', this.esEdicion ? [] : [Validators.required, Validators.minLength(8)]],
     activo: [this.data.usuario?.activo ?? true],
+  });
+
+  private readonly rolIdSig = toSignal(this.form.controls.rol_id.valueChanges, {
+    initialValue: this.form.controls.rol_id.value,
+  });
+
+  /** True si el rol elegido pertenece a una sucursal. */
+  protected readonly requiereSucursal = computed(() => {
+    const rol = this.data.roles.find((r) => r.id === this.rolIdSig());
+    return rol != null && ROLES_CON_SUCURSAL.includes(rol.nombre);
   });
 
   async guardar(): Promise<void> {
@@ -61,9 +83,14 @@ export class UsuarioFormDialog {
       this.form.markAllAsTouched();
       return;
     }
+    if (this.requiereSucursal() && !this.form.controls.sucursal_id.value) {
+      this.error.set('Elegí una sucursal para este rol.');
+      return;
+    }
     this.guardando.set(true);
     this.error.set(null);
     const v = this.form.getRawValue();
+    const sucursalId = this.requiereSucursal() ? v.sucursal_id : null;
 
     try {
       let resultado: Usuario;
@@ -74,6 +101,7 @@ export class UsuarioFormDialog {
           email: v.email,
           telefono: v.telefono || null,
           rol_id: v.rol_id,
+          sucursal_id: sucursalId,
           activo: v.activo,
         };
         if (v.password) dto['password'] = v.password;
@@ -88,6 +116,7 @@ export class UsuarioFormDialog {
             email: v.email,
             telefono: v.telefono || null,
             rol_id: v.rol_id as number,
+            sucursal_id: sucursalId,
             password: v.password,
           }),
         );

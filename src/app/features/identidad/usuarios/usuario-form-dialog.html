@@ -47,6 +47,18 @@
       }
     </mat-form-field>
 
+    @if (requiereSucursal()) {
+      <mat-form-field appearance="outline">
+        <mat-label>Sucursal</mat-label>
+        <mat-select formControlName="sucursal_id">
+          @for (s of sucursales(); track s.id) {
+            <mat-option [value]="s.id">{{ s.nombre }} — {{ s.ciudad }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>Requerida para cajeros y encargados.</mat-hint>
+      </mat-form-field>
+    }
+
     <mat-form-field appearance="outline" class="col-2">
       <mat-label>{{ esEdicion ? 'Nueva contraseña (opcional)' : 'Contraseña' }}</mat-label>
       <input matInput type="password" formControlName="password" autocomplete="new-password" />
