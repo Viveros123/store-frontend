@@ -46,6 +46,13 @@ export const routes: Routes = [
             (m) => m.SucursalesPage,
           ),
       },
+      {
+        path: 'proveedores',
+        loadComponent: () =>
+          import('./features/proveedores/proveedores-page').then(
+            (m) => m.ProveedoresPage,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

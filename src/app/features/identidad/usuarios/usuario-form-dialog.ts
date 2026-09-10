@@ -16,7 +16,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { ROL, Rol, Usuario } from '../../../core/models/usuario.model';
 import { SucursalOpcion } from '../../../core/models/sucursal.model';
+import { ProveedorOpcion } from '../../../core/models/proveedor.model';
 import { SucursalesService } from '../../sucursales/sucursales.service';
+import { ProveedoresService } from '../../proveedores/proveedores.service';
 import { UsuariosService } from './usuarios.service';
 
 export interface UsuarioFormData {
@@ -46,6 +48,7 @@ export class UsuarioFormDialog {
   private readonly fb = inject(FormBuilder);
   private readonly service = inject(UsuariosService);
   private readonly sucursalesService = inject(SucursalesService);
+  private readonly proveedoresService = inject(ProveedoresService);
   private readonly ref = inject(MatDialogRef<UsuarioFormDialog, Usuario>);
   protected readonly data = inject<UsuarioFormData>(MAT_DIALOG_DATA);
 
@@ -56,6 +59,9 @@ export class UsuarioFormDialog {
   protected readonly sucursales = toSignal(this.sucursalesService.opciones(), {
     initialValue: [] as SucursalOpcion[],
   });
+  protected readonly proveedores = toSignal(this.proveedoresService.opciones(), {
+    initialValue: [] as ProveedorOpcion[],
+  });
 
   protected readonly form = this.fb.nonNullable.group({
     nombre: [this.data.usuario?.nombre ?? '', [Validators.required, Validators.minLength(2)]],
@@ -64,6 +70,7 @@ export class UsuarioFormDialog {
     telefono: [this.data.usuario?.telefono ?? ''],
     rol_id: [this.data.usuario?.rol_id ?? (null as number | null), [Validators.required]],
     sucursal_id: [this.data.usuario?.sucursal_id ?? (null as number | null)],
+    proveedor_id: [this.data.usuario?.proveedor_id ?? (null as number | null)],
     password: ['', this.esEdicion ? [] : [Validators.required, Validators.minLength(8)]],
     activo: [this.data.usuario?.activo ?? true],
   });
@@ -72,11 +79,16 @@ export class UsuarioFormDialog {
     initialValue: this.form.controls.rol_id.value,
   });
 
-  /** True si el rol elegido pertenece a una sucursal. */
-  protected readonly requiereSucursal = computed(() => {
-    const rol = this.data.roles.find((r) => r.id === this.rolIdSig());
-    return rol != null && ROLES_CON_SUCURSAL.includes(rol.nombre);
-  });
+  private readonly rolNombre = computed(
+    () => this.data.roles.find((r) => r.id === this.rolIdSig())?.nombre ?? null,
+  );
+
+  protected readonly requiereSucursal = computed(
+    () => this.rolNombre() != null && ROLES_CON_SUCURSAL.includes(this.rolNombre()!),
+  );
+  protected readonly requiereProveedor = computed(
+    () => this.rolNombre() === ROL.PROVEEDOR,
+  );
 
   async guardar(): Promise<void> {
     if (this.form.invalid || this.guardando()) {
@@ -87,10 +99,15 @@ export class UsuarioFormDialog {
       this.error.set('Elegí una sucursal para este rol.');
       return;
     }
+    if (this.requiereProveedor() && !this.form.controls.proveedor_id.value) {
+      this.error.set('Elegí el proveedor asociado a esta cuenta.');
+      return;
+    }
     this.guardando.set(true);
     this.error.set(null);
     const v = this.form.getRawValue();
     const sucursalId = this.requiereSucursal() ? v.sucursal_id : null;
+    const proveedorId = this.requiereProveedor() ? v.proveedor_id : null;
 
     try {
       let resultado: Usuario;
@@ -102,6 +119,7 @@ export class UsuarioFormDialog {
           telefono: v.telefono || null,
           rol_id: v.rol_id,
           sucursal_id: sucursalId,
+          proveedor_id: proveedorId,
           activo: v.activo,
         };
         if (v.password) dto['password'] = v.password;
@@ -117,6 +135,7 @@ export class UsuarioFormDialog {
             telefono: v.telefono || null,
             rol_id: v.rol_id as number,
             sucursal_id: sucursalId,
+            proveedor_id: proveedorId,
             password: v.password,
           }),
         );

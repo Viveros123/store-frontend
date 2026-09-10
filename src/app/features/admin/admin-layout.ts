@@ -53,6 +53,7 @@ export class AdminLayout {
   protected readonly nav: NavItem[] = [
     { label: 'Usuarios', icon: 'group', link: '/admin/usuarios' },
     { label: 'Sucursales', icon: 'store', link: '/admin/sucursales' },
+    { label: 'Proveedores', icon: 'local_shipping', link: '/admin/proveedores' },
   ];
 
   alternar(): void {
