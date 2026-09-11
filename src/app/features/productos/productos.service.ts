@@ -16,7 +16,8 @@ export interface ProductoCreate {
   categoria_id: number;
   coleccion_id?: number | null;
   proveedor_id: number;
-  precio_base: string;
+  precio_compra?: string | null;
+  precio_base?: string | null;
   imagen_url?: string | null;
 }
 

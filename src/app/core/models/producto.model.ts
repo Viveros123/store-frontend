@@ -9,7 +9,9 @@ export interface Producto {
   temporada: string | null;
   proveedor_id: number;
   proveedor: string | null;
-  precio_base: string; // decimal serializado como string
+  precio_compra: string | null; // lo que cobra el proveedor
+  precio_base: string | null; // precio de venta (lo fija el admin)
+  margen: string | null;
   imagen_url: string | null;
   activo: boolean;
   fecha_creacion: string;

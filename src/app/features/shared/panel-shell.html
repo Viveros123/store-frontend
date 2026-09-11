@@ -4,7 +4,9 @@
   </button>
   <span class="brand">
     <mat-icon>storefront</mat-icon> FashionStore
-    <span class="tag">Administración</span>
+    @if (etiqueta()) {
+      <span class="tag">{{ etiqueta() }}</span>
+    }
   </span>
 
   <span class="spacer"></span>
@@ -37,7 +39,7 @@
     class="side"
   >
     <mat-nav-list>
-      @for (item of nav; track item.link) {
+      @for (item of nav(); track item.link) {
         <a
           mat-list-item
           [routerLink]="item.link"
@@ -55,7 +57,7 @@
 
   <mat-sidenav-content class="content">
     <div class="content-inner">
-      <router-outlet />
+      <ng-content />
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

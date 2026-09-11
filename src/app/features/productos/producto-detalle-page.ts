@@ -81,9 +81,16 @@ export class ProductoDetallePage {
     categoria_id: [null as number | null, [Validators.required]],
     coleccion_id: [null as number | null],
     proveedor_id: [null as number | null, [Validators.required]],
-    precio_base: ['', [Validators.required, Validators.min(0.01)]],
+    precio_compra: [''],
+    precio_base: [''],
     imagen_url: [''],
     activo: [true],
+  });
+
+  protected readonly margen = computed(() => {
+    const d = this.detalle();
+    if (!d || d.precio_base == null || d.precio_compra == null) return null;
+    return +d.precio_base - +d.precio_compra;
   });
 
   constructor() {
@@ -110,7 +117,8 @@ export class ProductoDetallePage {
           categoria_id: d.categoria_id,
           coleccion_id: d.coleccion_id,
           proveedor_id: d.proveedor_id,
-          precio_base: d.precio_base,
+          precio_compra: d.precio_compra ?? '',
+          precio_base: d.precio_base ?? '',
           imagen_url: d.imagen_url ?? '',
           activo: d.activo,
         });
@@ -140,7 +148,8 @@ export class ProductoDetallePage {
       categoria_id: v.categoria_id!,
       coleccion_id: v.coleccion_id,
       proveedor_id: v.proveedor_id!,
-      precio_base: String(v.precio_base),
+      precio_compra: v.precio_compra ? String(v.precio_compra) : null,
+      precio_base: v.precio_base ? String(v.precio_base) : null,
       imagen_url: v.imagen_url || null,
     };
     try {

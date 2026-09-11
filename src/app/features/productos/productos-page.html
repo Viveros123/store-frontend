@@ -83,8 +83,14 @@
       </ng-container>
 
       <ng-container matColumnDef="precio">
-        <th mat-header-cell *matHeaderCellDef>Precio base</th>
-        <td mat-cell *matCellDef="let p">Bs {{ +p.precio_base | number: '1.2-2' }}</td>
+        <th mat-header-cell *matHeaderCellDef>Precio venta</th>
+        <td mat-cell *matCellDef="let p">
+          @if (p.precio_base) {
+            Bs {{ +p.precio_base | number: '1.2-2' }}
+          } @else {
+            <span class="sin-precio">sin precio</span>
+          }
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="variantes">

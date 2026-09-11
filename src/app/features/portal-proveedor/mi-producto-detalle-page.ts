@@ -74,7 +74,7 @@ export class MiProductoDetallePage {
     descripcion: [''],
     categoria_id: [null as number | null, [Validators.required]],
     coleccion_id: [null as number | null],
-    precio_base: ['', [Validators.required, Validators.min(0.01)]],
+    precio_compra: ['', [Validators.required, Validators.min(0.01)]],
     imagen_url: [''],
   });
 
@@ -100,7 +100,7 @@ export class MiProductoDetallePage {
           descripcion: d.descripcion ?? '',
           categoria_id: d.categoria_id,
           coleccion_id: d.coleccion_id,
-          precio_base: d.precio_base,
+          precio_compra: d.precio_compra ?? '',
           imagen_url: d.imagen_url ?? '',
         });
         this.cargando.set(false);
@@ -129,7 +129,7 @@ export class MiProductoDetallePage {
       categoria_id: v.categoria_id!,
       coleccion_id: v.coleccion_id,
       proveedor_id: 0, // ignorado por el backend
-      precio_base: String(v.precio_base),
+      precio_compra: String(v.precio_compra),
       imagen_url: v.imagen_url || null,
     };
     try {

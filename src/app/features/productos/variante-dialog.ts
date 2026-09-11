@@ -68,12 +68,14 @@ export interface VarianteDialogData {
           }
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="col-2">
-          <mat-label>Precio (opcional)</mat-label>
-          <span matTextPrefix>Bs&nbsp;</span>
-          <input matInput type="number" step="0.01" formControlName="precio" />
-          <mat-hint>Si lo dejás vacío, usa el precio base del producto.</mat-hint>
-        </mat-form-field>
+        @if (!data.portal) {
+          <mat-form-field appearance="outline" class="col-2">
+            <mat-label>Precio de venta (opcional)</mat-label>
+            <span matTextPrefix>Bs&nbsp;</span>
+            <input matInput type="number" step="0.01" formControlName="precio" />
+            <mat-hint>Si lo dejás vacío, usa el precio de venta del producto.</mat-hint>
+          </mat-form-field>
+        }
 
         @if (error()) {
           <p class="err col-2">{{ error() }}</p>
