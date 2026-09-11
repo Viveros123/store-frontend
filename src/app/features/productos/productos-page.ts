@@ -124,6 +124,29 @@ export class ProductosPage implements OnInit {
     this.cargar();
   }
 
+  eliminar(p: Producto): void {
+    if (
+      !confirm(
+        `¿Eliminar "${p.nombre}"? Se borrarán también sus variantes y el stock cargado. Esta acción no se puede deshacer.`,
+      )
+    ) {
+      return;
+    }
+    this.service.eliminar(p.id).subscribe({
+      next: () => {
+        this.snack.open('Producto eliminado.', 'OK', { duration: 2500 });
+        this.cargar();
+      },
+      error: (e: unknown) =>
+        this.snack.open(
+          (e as { error?: { detail?: string } }).error?.detail ??
+            'No se pudo eliminar el producto.',
+          'Cerrar',
+          { duration: 4000 },
+        ),
+    });
+  }
+
   private cargar(): void {
     this.cargando.set(true);
     const activo =

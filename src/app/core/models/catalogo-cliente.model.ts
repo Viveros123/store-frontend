@@ -25,6 +25,7 @@ export interface CatalogoVariante {
   color: string | null;
   color_hex: string | null;
   precio_efectivo: string;
+  imagen_efectivo: string | null;
 }
 
 export interface CatalogoProductoDetalle extends CatalogoProducto {

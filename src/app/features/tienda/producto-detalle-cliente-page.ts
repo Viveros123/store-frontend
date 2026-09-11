@@ -60,6 +60,10 @@ export class ProductoDetalleClientePage {
     );
   });
 
+  protected readonly imagenMostrada = computed(
+    () => this.varianteSeleccionada()?.imagen_efectivo ?? this.producto()?.imagen_url ?? null,
+  );
+
   protected readonly disponibilidad = signal<DisponibilidadSucursal[]>([]);
   protected readonly cargandoDisponibilidad = signal(false);
 

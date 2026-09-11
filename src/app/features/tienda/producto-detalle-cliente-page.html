@@ -17,8 +17,8 @@
 
   <div class="layout">
     <div class="galeria">
-      @if (p.imagen_url) {
-        <img [src]="p.imagen_url" [alt]="p.nombre" />
+      @if (imagenMostrada(); as img) {
+        <img [src]="img" [alt]="p.nombre" />
       } @else {
         <div class="ph">
           <mat-icon>checkroom</mat-icon>

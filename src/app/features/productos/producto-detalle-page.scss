@@ -11,6 +11,10 @@
   z-index: 10;
 }
 
+.spacer {
+  flex: 1 1 auto;
+}
+
 .content {
   max-width: 860px;
   margin: 0 auto;
@@ -65,6 +69,22 @@ mat-form-field {
 table {
   width: 100%;
   min-width: 520px;
+}
+
+.thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid #e2e8f0;
+}
+
+.thumb-ph {
+  display: grid;
+  place-items: center;
+  background: var(--fs-green-50);
+  color: var(--fs-green-700);
 }
 
 .sw {

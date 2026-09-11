@@ -115,6 +115,9 @@
           <a mat-icon-button matTooltip="Editar" [routerLink]="['/admin/productos', p.id]">
             <mat-icon>edit</mat-icon>
           </a>
+          <button mat-icon-button matTooltip="Eliminar" (click)="eliminar(p)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </td>
       </ng-container>
 

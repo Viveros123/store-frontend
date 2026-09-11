@@ -60,7 +60,14 @@ export class ProductoDetallePage {
   private readonly dialog = inject(MatDialog);
   private readonly snack = inject(MatSnackBar);
 
-  protected readonly colVar = ['talla', 'color', 'sku', 'precio', 'acciones'];
+  protected readonly colVar = [
+    'imagen',
+    'talla',
+    'color',
+    'sku',
+    'precio',
+    'acciones',
+  ];
 
   protected readonly productoId = signal<number | null>(null);
   protected readonly esNuevo = computed(() => this.productoId() === null);
@@ -210,6 +217,30 @@ export class ProductoDetallePage {
       },
       error: () =>
         this.snack.open('No se pudo eliminar.', 'Cerrar', { duration: 4000 }),
+    });
+  }
+
+  eliminarProducto(): void {
+    const nombre = this.detalle()?.nombre ?? 'este producto';
+    if (
+      !confirm(
+        `¿Eliminar "${nombre}"? Se borrarán también sus variantes y el stock cargado. Esta acción no se puede deshacer.`,
+      )
+    ) {
+      return;
+    }
+    this.service.eliminar(this.productoId()!).subscribe({
+      next: () => {
+        this.snack.open('Producto eliminado.', 'OK', { duration: 2500 });
+        void this.router.navigate(['/admin/productos']);
+      },
+      error: (e: unknown) =>
+        this.snack.open(
+          (e as { error?: { detail?: string } }).error?.detail ??
+            'No se pudo eliminar el producto.',
+          'Cerrar',
+          { duration: 4000 },
+        ),
     });
   }
 }

@@ -29,6 +29,7 @@ export interface VarianteCreate {
   color_id: number;
   sku: string;
   precio?: string | null;
+  imagen_url?: string | null;
 }
 
 export type VarianteUpdate = Partial<VarianteCreate>;
@@ -72,6 +73,10 @@ export class ProductosService {
 
   actualizar(id: number, dto: ProductoUpdate): Observable<Producto> {
     return this.http.patch<Producto>(`${this.base}/productos/${id}`, dto);
+  }
+
+  eliminar(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.base}/productos/${id}`);
   }
 
   agregarVariante(productoId: number, dto: VarianteCreate): Observable<Variante> {

@@ -3,6 +3,12 @@
     <mat-icon>arrow_back</mat-icon>
   </a>
   <span>{{ esNuevo() ? 'Nuevo producto' : detalle()?.nombre || 'Producto' }}</span>
+  <span class="spacer"></span>
+  @if (!esNuevo()) {
+    <button mat-icon-button matTooltip="Eliminar producto" (click)="eliminarProducto()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  }
 </mat-toolbar>
 
 @if (cargando()) {
@@ -115,6 +121,17 @@
 
         <div class="scroll">
           <table mat-table [dataSource]="variantes()">
+            <ng-container matColumnDef="imagen">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let v">
+                @if (v.imagen_efectivo) {
+                  <img [src]="v.imagen_efectivo" alt="" class="thumb" />
+                } @else {
+                  <span class="thumb thumb-ph"><mat-icon>checkroom</mat-icon></span>
+                }
+              </td>
+            </ng-container>
+
             <ng-container matColumnDef="talla">
               <th mat-header-cell *matHeaderCellDef>Talla</th>
               <td mat-cell *matCellDef="let v">{{ v.talla }}</td>

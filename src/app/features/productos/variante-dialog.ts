@@ -77,6 +77,12 @@ export interface VarianteDialogData {
           </mat-form-field>
         }
 
+        <mat-form-field appearance="outline" class="col-2">
+          <mat-label>URL de imagen (opcional)</mat-label>
+          <input matInput formControlName="imagen_url" placeholder="https://…" />
+          <mat-hint>Para este color/talla en particular. Si la dejás vacía, usa la imagen del producto.</mat-hint>
+        </mat-form-field>
+
         @if (error()) {
           <p class="err col-2">{{ error() }}</p>
         }
@@ -126,6 +132,7 @@ export class VarianteDialog {
     color_id: [this.v?.color_id ?? (null as number | null), [Validators.required]],
     sku: [this.v?.sku ?? '', [Validators.required]],
     precio: [this.v?.precio ?? ''],
+    imagen_url: [this.v?.imagen_url ?? ''],
   });
 
   async guardar(): Promise<void> {
@@ -141,6 +148,7 @@ export class VarianteDialog {
       color_id: val.color_id!,
       sku: val.sku.trim(),
       precio: val.precio ? String(val.precio) : null,
+      imagen_url: val.imagen_url?.trim() || null,
     };
     try {
       const res = this.v
