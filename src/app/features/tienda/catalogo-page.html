@@ -18,7 +18,81 @@
       <mat-option value="nombre">Nombre (A-Z)</mat-option>
     </mat-select>
   </mat-form-field>
+
+  <button
+    type="button"
+    class="btn-filtros"
+    [class.activo]="panelAbierto() || filtrosActivos() > 0"
+    (click)="alternarPanel()"
+  >
+    <mat-icon>tune</mat-icon>
+    Filtros
+    @if (filtrosActivos() > 0) {
+      <span class="badge">{{ filtrosActivos() }}</span>
+    }
+  </button>
 </div>
+
+@if (panelAbierto()) {
+  <div class="panel-filtros">
+    @if (tallas().length > 0) {
+      <div class="grupo">
+        <span class="etiqueta">Talla</span>
+        <div class="opciones">
+          @for (t of tallas(); track t.id) {
+            <button
+              type="button"
+              class="pill"
+              [class.sel]="tallaId() === t.id"
+              (click)="elegirTalla(t.id)"
+            >
+              {{ t.valor }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (colores().length > 0) {
+      <div class="grupo">
+        <span class="etiqueta">Color</span>
+        <div class="opciones">
+          @for (c of colores(); track c.id) {
+            <button
+              type="button"
+              class="swatch"
+              [class.sel]="colorId() === c.id"
+              [style.background]="c.codigo_hex || '#e2e8f0'"
+              [matTooltip]="c.nombre"
+              (click)="elegirColor(c.id)"
+            ></button>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="grupo precio">
+      <span class="etiqueta">Precio (Bs)</span>
+      <div class="rango">
+        <mat-form-field appearance="outline" class="precio-input">
+          <mat-label>Mín.</mat-label>
+          <input matInput type="number" min="0" [formControl]="precioMinCtrl" />
+        </mat-form-field>
+        <span class="guion">—</span>
+        <mat-form-field appearance="outline" class="precio-input">
+          <mat-label>Máx.</mat-label>
+          <input matInput type="number" min="0" [formControl]="precioMaxCtrl" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    @if (filtrosActivos() > 0) {
+      <button type="button" class="link-limpiar" (click)="limpiarFiltros()">
+        Limpiar filtros
+      </button>
+    }
+  </div>
+}
 
 @if (categorias().length > 0) {
   <div class="chips">
