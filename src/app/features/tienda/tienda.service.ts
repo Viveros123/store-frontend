@@ -1,0 +1,47 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { environment } from '../../../environments/environment';
+import { Page } from '../../core/models/usuario.model';
+import { Categoria } from '../../core/models/catalogo.model';
+import {
+  CatalogoProducto,
+  CatalogoProductoDetalle,
+  OrdenCatalogo,
+} from '../../core/models/catalogo-cliente.model';
+
+export interface FiltrosCatalogo {
+  q?: string;
+  categoria_id?: number | null;
+  orden?: OrdenCatalogo;
+  page: number;
+  size: number;
+}
+
+@Injectable({ providedIn: 'root' })
+export class TiendaService {
+  private readonly http = inject(HttpClient);
+  private readonly base = `${environment.apiUrl}/catalogo`;
+
+  categorias(): Observable<Categoria[]> {
+    return this.http.get<Categoria[]>(`${this.base}/categorias`);
+  }
+
+  destacados(limit = 8): Observable<CatalogoProducto[]> {
+    const params = new HttpParams().set('limit', limit);
+    return this.http.get<CatalogoProducto[]>(`${this.base}/destacados`, { params });
+  }
+
+  listar(f: FiltrosCatalogo): Observable<Page<CatalogoProducto>> {
+    let params = new HttpParams().set('page', f.page).set('size', f.size);
+    if (f.q) params = params.set('q', f.q);
+    if (f.categoria_id != null) params = params.set('categoria_id', f.categoria_id);
+    if (f.orden) params = params.set('orden', f.orden);
+    return this.http.get<Page<CatalogoProducto>>(`${this.base}/productos`, { params });
+  }
+
+  detalle(id: number): Observable<CatalogoProductoDetalle> {
+    return this.http.get<CatalogoProductoDetalle>(`${this.base}/productos/${id}`);
+  }
+}

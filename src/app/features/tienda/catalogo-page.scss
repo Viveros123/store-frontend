@@ -1,0 +1,110 @@
+:host {
+  display: block;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  background: #fff;
+}
+
+.page-head {
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-size: 1.7rem;
+    color: #0f172a;
+  }
+  p {
+    margin: 0.2rem 0 0;
+    color: #64748b;
+    font-size: 0.92rem;
+  }
+}
+
+.barra {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.buscar {
+  flex: 1 1 280px;
+}
+
+.orden {
+  flex: 0 1 220px;
+}
+
+.chips {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  margin-bottom: 1.5rem;
+  scrollbar-width: thin;
+}
+
+.chip {
+  flex: 0 0 auto;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #475569;
+  border-radius: 999px;
+  padding: 0.4rem 0.95rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.chip:hover {
+  border-color: var(--fs-green-500);
+}
+.chip.activo {
+  background: var(--fs-green-700);
+  border-color: var(--fs-green-700);
+  color: #fff;
+}
+
+.barra-progreso {
+  margin-bottom: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 960px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+mat-paginator {
+  background: transparent;
+  margin-top: 1.5rem;
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 4rem 1rem;
+  text-align: center;
+  color: #64748b;
+
+  mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: #cbd5e1;
+  }
+}

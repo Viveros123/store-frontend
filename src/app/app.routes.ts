@@ -10,7 +10,29 @@ import {
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./features/home/home').then((m) => m.Home),
+    loadComponent: () =>
+      import('./features/tienda/tienda-layout').then((m) => m.TiendaLayout),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/home/home').then((m) => m.Home),
+      },
+      {
+        path: 'catalogo',
+        loadComponent: () =>
+          import('./features/tienda/catalogo-page').then(
+            (m) => m.CatalogoPage,
+          ),
+      },
+      {
+        path: 'catalogo/:id',
+        loadComponent: () =>
+          import('./features/tienda/producto-detalle-cliente-page').then(
+            (m) => m.ProductoDetalleClientePage,
+          ),
+      },
+    ],
   },
   {
     path: 'ingresar',
