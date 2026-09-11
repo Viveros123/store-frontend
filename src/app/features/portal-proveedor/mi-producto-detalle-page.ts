@@ -179,6 +179,24 @@ export class MiProductoDetallePage {
     });
   }
 
+  eliminarProducto(): void {
+    const d = this.detalle();
+    if (!d) return;
+    if (!confirm(`¿Eliminar "${d.nombre}"? Esta acción no se puede deshacer.`)) return;
+    this.service.eliminar(d.id).subscribe({
+      next: () => {
+        this.snack.open('Producto eliminado.', 'OK', { duration: 2500 });
+        void this.router.navigate(['/proveedor/productos']);
+      },
+      error: (e) =>
+        this.snack.open(
+          e?.error?.detail ?? 'No se pudo eliminar el producto.',
+          'Cerrar',
+          { duration: 4000 },
+        ),
+    });
+  }
+
   eliminarVariante(v: Variante): void {
     if (!confirm(`¿Eliminar la variante ${v.sku}?`)) return;
     this.service.eliminarVariante(v.id).subscribe({

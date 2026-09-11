@@ -63,6 +63,11 @@
           <a mat-icon-button matTooltip="Editar" [routerLink]="['/proveedor/productos', p.id]">
             <mat-icon>edit</mat-icon>
           </a>
+          @if (!p.activo) {
+            <button mat-icon-button matTooltip="Eliminar" (click)="eliminar(p)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="columnas"></tr>

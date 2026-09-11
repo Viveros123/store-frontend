@@ -50,6 +50,10 @@ export class PortalProveedorService {
     return this.http.patch<Producto>(`${this.base}/productos/${id}`, dto);
   }
 
+  eliminar(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.base}/productos/${id}`);
+  }
+
   agregarVariante(productoId: number, dto: VarianteCreate): Observable<Variante> {
     return this.http.post<Variante>(
       `${this.base}/productos/${productoId}/variantes`,

@@ -56,6 +56,22 @@ export class MisProductosPage implements OnInit {
     'estado',
     'acciones',
   ];
+
+  eliminar(p: Producto): void {
+    if (!confirm(`¿Eliminar "${p.nombre}"? Esta acción no se puede deshacer.`)) return;
+    this.service.eliminar(p.id).subscribe({
+      next: () => {
+        this.snack.open('Producto eliminado.', 'OK', { duration: 2500 });
+        this.cargar();
+      },
+      error: (e) =>
+        this.snack.open(
+          e?.error?.detail ?? 'No se pudo eliminar el producto.',
+          'Cerrar',
+          { duration: 4000 },
+        ),
+    });
+  }
   protected readonly cargando = signal(false);
   protected readonly productos = signal<Producto[]>([]);
   protected readonly total = signal(0);
