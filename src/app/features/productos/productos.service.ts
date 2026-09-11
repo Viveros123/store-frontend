@@ -7,6 +7,7 @@ import { Page } from '../../core/models/usuario.model';
 import {
   Producto,
   ProductoDetalle,
+  ProductoOpcion,
   Variante,
 } from '../../core/models/producto.model';
 
@@ -59,6 +60,10 @@ export class ProductosService {
 
   obtener(id: number): Observable<ProductoDetalle> {
     return this.http.get<ProductoDetalle>(`${this.base}/productos/${id}`);
+  }
+
+  opciones(): Observable<ProductoOpcion[]> {
+    return this.http.get<ProductoOpcion[]>(`${this.base}/productos/opciones`);
   }
 
   crear(dto: ProductoCreate): Observable<Producto> {

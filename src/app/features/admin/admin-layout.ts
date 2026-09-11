@@ -18,6 +18,7 @@ export class AdminLayout {
     { label: 'Sucursales', icon: 'store', link: '/admin/sucursales' },
     { label: 'Proveedores', icon: 'local_shipping', link: '/admin/proveedores' },
     { label: 'Productos', icon: 'checkroom', link: '/admin/productos' },
+    { label: 'Inventario', icon: 'inventory_2', link: '/admin/inventario' },
     { label: 'Datos del catálogo', icon: 'sell', link: '/admin/catalogo-base' },
     {
       label: 'Temporadas y colecciones',

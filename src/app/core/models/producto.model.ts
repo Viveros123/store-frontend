@@ -34,3 +34,8 @@ export interface Variante {
 export interface ProductoDetalle extends Producto {
   variantes: Variante[];
 }
+
+export interface ProductoOpcion {
+  id: number;
+  nombre: string;
+}

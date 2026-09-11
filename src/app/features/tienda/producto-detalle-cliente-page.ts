@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 
@@ -12,6 +12,7 @@ import {
   CatalogoProductoDetalle,
   CatalogoVariante,
 } from '../../core/models/catalogo-cliente.model';
+import { DisponibilidadSucursal } from '../../core/models/inventario.model';
 
 @Component({
   selector: 'app-producto-detalle-cliente-page',
@@ -59,6 +60,9 @@ export class ProductoDetalleClientePage {
     );
   });
 
+  protected readonly disponibilidad = signal<DisponibilidadSucursal[]>([]);
+  protected readonly cargandoDisponibilidad = signal(false);
+
   constructor() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.tienda.detalle(id).subscribe({
@@ -74,6 +78,26 @@ export class ProductoDetalleClientePage {
         this.cargando.set(false);
         this.noEncontrado.set(true);
       },
+    });
+
+    // CU12: consultar disponibilidad por sucursal de la variante elegida
+    effect(() => {
+      const variante = this.varianteSeleccionada();
+      if (!variante) {
+        this.disponibilidad.set([]);
+        return;
+      }
+      this.cargandoDisponibilidad.set(true);
+      this.tienda.disponibilidad(variante.id).subscribe({
+        next: (res) => {
+          this.disponibilidad.set(res);
+          this.cargandoDisponibilidad.set(false);
+        },
+        error: () => {
+          this.disponibilidad.set([]);
+          this.cargandoDisponibilidad.set(false);
+        },
+      });
     });
   }
 

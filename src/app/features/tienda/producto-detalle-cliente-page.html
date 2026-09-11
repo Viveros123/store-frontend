@@ -91,6 +91,30 @@
         Reservas y compras se habilitan en los próximos pasos del proyecto.
       </p>
 
+      @if (varianteSeleccionada(); as v) {
+        <div class="disponibilidad">
+          <span class="etiqueta">Disponible en</span>
+          @if (cargandoDisponibilidad()) {
+            <p class="muted">Consultando sucursales…</p>
+          } @else if (disponibilidad().length > 0) {
+            <ul class="lista-sucursales">
+              @for (d of disponibilidad(); track d.sucursal_id) {
+                <li>
+                  <mat-icon>store</mat-icon>
+                  <span>{{ d.sucursal }} — {{ d.ciudad }}</span>
+                  <span class="cant">{{ d.cantidad_disponible }} und.</span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="muted sin-stock">
+              <mat-icon>error_outline</mat-icon>
+              Sin stock en sucursales para {{ v.talla }} / {{ v.color }} por ahora.
+            </p>
+          }
+        </div>
+      }
+
       @if (p.descripcion) {
         <div class="descripcion">
           <h2>Descripción</h2>

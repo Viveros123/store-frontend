@@ -133,6 +133,13 @@ export const routes: Routes = [
             (m) => m.ProductoDetallePage,
           ),
       },
+      {
+        path: 'inventario',
+        loadComponent: () =>
+          import('./features/inventario/inventario-page').then(
+            (m) => m.InventarioPage,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

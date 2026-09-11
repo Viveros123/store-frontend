@@ -10,6 +10,7 @@ import {
   CatalogoProductoDetalle,
   OrdenCatalogo,
 } from '../../core/models/catalogo-cliente.model';
+import { DisponibilidadSucursal } from '../../core/models/inventario.model';
 
 export interface FiltrosCatalogo {
   q?: string;
@@ -59,5 +60,11 @@ export class TiendaService {
 
   detalle(id: number): Observable<CatalogoProductoDetalle> {
     return this.http.get<CatalogoProductoDetalle>(`${this.base}/productos/${id}`);
+  }
+
+  disponibilidad(varianteId: number): Observable<DisponibilidadSucursal[]> {
+    return this.http.get<DisponibilidadSucursal[]>(
+      `${this.base}/variantes/${varianteId}/disponibilidad`,
+    );
   }
 }
