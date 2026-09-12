@@ -83,6 +83,17 @@ export class MovimientosPage implements OnInit {
     this.cargar();
   }
 
+  private readonly etiquetasTipo: Record<string, string> = {
+    INGRESO: 'Ingreso',
+    AJUSTE: 'Ajuste',
+    SALIDA_VENTA: 'Venta',
+    LIBERACION_RESERVA: 'Liberación de reserva',
+  };
+
+  etiquetaTipo(tipo: string): string {
+    return this.etiquetasTipo[tipo] ?? tipo;
+  }
+
   onPage(ev: PageEvent): void {
     this.page.set(ev.pageIndex);
     this.size.set(ev.pageSize);

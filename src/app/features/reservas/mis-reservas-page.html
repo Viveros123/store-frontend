@@ -43,6 +43,19 @@
           </li>
         }
       </ul>
+      @if (r.estado === 'PENDIENTE') {
+        <div class="acciones">
+          <button
+            mat-stroked-button
+            color="warn"
+            [disabled]="cancelando() === r.id"
+            (click)="cancelar(r)"
+          >
+            <mat-icon>event_busy</mat-icon>
+            {{ cancelando() === r.id ? 'Cancelando…' : 'Cancelar reserva' }}
+          </button>
+        </div>
+      }
     </div>
   }
 </div>

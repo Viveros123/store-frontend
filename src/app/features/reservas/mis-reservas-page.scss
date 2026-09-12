@@ -109,6 +109,14 @@
   }
 }
 
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid #eef2f7;
+}
+
 .items {
   list-style: none;
   margin: 0;

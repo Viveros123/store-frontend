@@ -47,4 +47,8 @@ export class ReservasService {
   mias(): Observable<Reserva[]> {
     return this.http.get<Reserva[]>(`${this.base}/mias`);
   }
+
+  cancelar(id: number): Observable<Reserva> {
+    return this.http.post<Reserva>(`${this.base}/${id}/cancelar`, {});
+  }
 }
