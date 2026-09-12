@@ -140,6 +140,13 @@ export const routes: Routes = [
             (m) => m.InventarioPage,
           ),
       },
+      {
+        path: 'movimientos',
+        loadComponent: () =>
+          import('./features/inventario/movimientos-page').then(
+            (m) => m.MovimientosPage,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

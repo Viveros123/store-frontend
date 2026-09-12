@@ -19,6 +19,11 @@ export class AdminLayout {
     { label: 'Proveedores', icon: 'local_shipping', link: '/admin/proveedores' },
     { label: 'Productos', icon: 'checkroom', link: '/admin/productos' },
     { label: 'Inventario', icon: 'inventory_2', link: '/admin/inventario' },
+    {
+      label: 'Movimientos de stock',
+      icon: 'sync_alt',
+      link: '/admin/movimientos',
+    },
     { label: 'Datos del catálogo', icon: 'sell', link: '/admin/catalogo-base' },
     {
       label: 'Temporadas y colecciones',

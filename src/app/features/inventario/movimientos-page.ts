@@ -1,75 +1,61 @@
 import {
   Component,
-  DestroyRef,
-  ElementRef,
-  HostListener,
   OnInit,
   computed,
   inject,
   signal,
-  viewChild,
 } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { DecimalPipe } from '@angular/common';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DecimalPipe, DatePipe } from '@angular/common';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { toSignal } from '@angular/core/rxjs-interop';
 import { SucursalOpcion } from '../../core/models/sucursal.model';
-import { InventarioItem } from '../../core/models/inventario.model';
+import { MovimientoInventario } from '../../core/models/inventario.model';
 import { InventarioService } from './inventario.service';
 import { SucursalesService } from '../sucursales/sucursales.service';
-import { AjustarStockDialog } from './ajustar-stock-dialog';
+import { RegistrarMovimientoDialog } from './registrar-movimiento-dialog';
 
 @Component({
-  selector: 'app-inventario-page',
+  selector: 'app-movimientos-page',
   imports: [
-    ReactiveFormsModule,
     DecimalPipe,
+    DatePipe,
     MatFormFieldModule,
-    MatInputModule,
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
     MatTableModule,
     MatPaginatorModule,
     MatProgressBarModule,
-    MatTooltipModule,
   ],
-  templateUrl: './inventario-page.html',
-  styleUrl: './inventario-page.scss',
+  templateUrl: './movimientos-page.html',
+  styleUrl: './movimientos-page.scss',
 })
-export class InventarioPage implements OnInit {
+export class MovimientosPage implements OnInit {
   private readonly service = inject(InventarioService);
   private readonly sucursalesSvc = inject(SucursalesService);
   private readonly dialog = inject(MatDialog);
   private readonly snack = inject(MatSnackBar);
-  private readonly destroyRef = inject(DestroyRef);
-
-  private readonly buscador =
-    viewChild<ElementRef<HTMLInputElement>>('buscador');
 
   protected readonly columnas = [
+    'fecha',
     'producto',
     'variante',
     'sucursal',
-    'disponible',
-    'reservado',
+    'tipo',
+    'cantidad',
     'costo',
-    'estado',
-    'acciones',
+    'usuario',
+    'nota',
   ];
 
   protected readonly sucursales = toSignal(this.sucursalesSvc.opciones(), {
@@ -77,12 +63,10 @@ export class InventarioPage implements OnInit {
   });
 
   protected readonly cargando = signal(false);
-  protected readonly items = signal<InventarioItem[]>([]);
+  protected readonly items = signal<MovimientoInventario[]>([]);
   protected readonly total = signal(0);
   protected readonly page = signal(0);
   protected readonly size = signal(10);
-
-  protected readonly qCtrl = new FormControl('', { nonNullable: true });
   protected readonly sucursalId = signal<number | null>(null);
 
   protected readonly sinResultados = computed(
@@ -90,27 +74,7 @@ export class InventarioPage implements OnInit {
   );
 
   ngOnInit(): void {
-    this.qCtrl.valueChanges
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe(() => {
-        this.page.set(0);
-        this.cargar();
-      });
     this.cargar();
-  }
-
-  @HostListener('document:keydown', ['$event'])
-  enfocarBuscador(ev: Event): void {
-    const e = ev as KeyboardEvent;
-    if (e.key !== '/') return;
-    const t = e.target as HTMLElement;
-    if (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA') return;
-    e.preventDefault();
-    this.buscador()?.nativeElement.focus();
   }
 
   cambiarSucursal(valor: number | null): void {
@@ -128,8 +92,7 @@ export class InventarioPage implements OnInit {
   private cargar(): void {
     this.cargando.set(true);
     this.service
-      .listar({
-        q: this.qCtrl.value.trim() || undefined,
+      .listarMovimientos({
         sucursal_id: this.sucursalId(),
         page: this.page() + 1,
         size: this.size(),
@@ -142,25 +105,23 @@ export class InventarioPage implements OnInit {
         },
         error: () => {
           this.cargando.set(false);
-          this.snack.open('No se pudo cargar el inventario.', 'Cerrar', {
+          this.snack.open('No se pudieron cargar los movimientos.', 'Cerrar', {
             duration: 4000,
           });
         },
       });
   }
 
-  ajustar(item?: InventarioItem): void {
-    const ref = this.dialog.open<
-      AjustarStockDialog,
-      { item?: InventarioItem },
-      InventarioItem | undefined
-    >(AjustarStockDialog, {
-      data: { item },
+  registrar(): void {
+    const ref = this.dialog.open(RegistrarMovimientoDialog, {
+      data: {},
       autoFocus: 'first-tabbable',
     });
     ref.afterClosed().subscribe((res) => {
       if (res) {
-        this.snack.open('Stock actualizado.', 'OK', { duration: 2500 });
+        this.snack.open('Ingreso registrado. Se actualizó el stock.', 'OK', {
+          duration: 3000,
+        });
         this.cargar();
       }
     });
