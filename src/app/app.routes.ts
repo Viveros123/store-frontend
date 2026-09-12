@@ -5,6 +5,7 @@ import {
   authGuard,
   noAuthGuard,
   proveedorGuard,
+  redirectStaffGuard,
 } from './core/auth/auth.guard';
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
+        canActivate: [redirectStaffGuard],
         loadComponent: () =>
           import('./features/home/home').then((m) => m.Home),
       },

@@ -28,6 +28,16 @@
         <small>{{ u.email }}</small>
         <small class="rol">{{ u.rol }}</small>
       </div>
+      @if (esAdmin()) {
+        <button mat-menu-item routerLink="/admin">
+          <mat-icon>dashboard</mat-icon> Panel de administración
+        </button>
+      }
+      @if (esProveedor()) {
+        <button mat-menu-item routerLink="/proveedor">
+          <mat-icon>dashboard</mat-icon> Portal proveedor
+        </button>
+      }
       <button mat-menu-item routerLink="/mi-cuenta">
         <mat-icon>person</mat-icon> Mi cuenta
       </button>

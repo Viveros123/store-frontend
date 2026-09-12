@@ -43,3 +43,17 @@ export const noAuthGuard: CanActivateFn = () => {
   const router = inject(Router);
   return auth.isAuthenticated() ? router.createUrlTree(['/']) : true;
 };
+
+/**
+ * Para la portada pública ('/'): si quien entra es personal (Admin o
+ * Proveedor), lo manda directo a su propio panel en vez de mostrarle la
+ * vitrina de cliente. El catálogo (/catalogo) sigue quedando accesible
+ * para todos si alguna vez quieren revisarlo como lo ve un cliente.
+ */
+export const redirectStaffGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  if (auth.hasRole(ROL.ADMIN)) return router.createUrlTree(['/admin/usuarios']);
+  if (auth.hasRole(ROL.PROVEEDOR)) return router.createUrlTree(['/proveedor/productos']);
+  return true;
+};
