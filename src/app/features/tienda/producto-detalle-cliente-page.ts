@@ -1,11 +1,13 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { TiendaService } from './tienda.service';
 import {
@@ -13,6 +15,12 @@ import {
   CatalogoVariante,
 } from '../../core/models/catalogo-cliente.model';
 import { DisponibilidadSucursal } from '../../core/models/inventario.model';
+import { AuthService } from '../../core/auth/auth.service';
+import { ROL } from '../../core/models/usuario.model';
+import {
+  ReservarDialog,
+  ReservarDialogData,
+} from '../reservas/reservar-dialog';
 
 @Component({
   selector: 'app-producto-detalle-cliente-page',
@@ -30,6 +38,10 @@ import { DisponibilidadSucursal } from '../../core/models/inventario.model';
 export class ProductoDetalleClientePage {
   private readonly tienda = inject(TiendaService);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly auth = inject(AuthService);
+  private readonly dialog = inject(MatDialog);
+  private readonly snack = inject(MatSnackBar);
 
   protected readonly cargando = signal(true);
   protected readonly noEncontrado = signal(false);
@@ -115,5 +127,50 @@ export class ProductoDetalleClientePage {
 
   elegirTalla(tallaId: number): void {
     this.tallaSel.set(tallaId);
+  }
+
+  reservar(): void {
+    if (!this.auth.isAuthenticated()) {
+      void this.router.navigate(['/ingresar'], {
+        queryParams: { returnUrl: this.router.url },
+      });
+      return;
+    }
+    if (!this.auth.hasRole(ROL.CLIENTE)) {
+      this.snack.open(
+        'Las reservas están disponibles solo para cuentas de cliente.',
+        'Cerrar',
+        { duration: 4000 },
+      );
+      return;
+    }
+    const variante = this.varianteSeleccionada();
+    const disponibles = this.disponibilidad();
+    if (!variante || disponibles.length === 0) return;
+
+    const ref = this.dialog.open<ReservarDialog, ReservarDialogData>(
+      ReservarDialog,
+      {
+        data: {
+          varianteId: variante.id,
+          productoNombre: this.producto()?.nombre ?? '',
+          talla: variante.talla,
+          color: variante.color,
+          sucursales: disponibles,
+        },
+        autoFocus: 'first-tabbable',
+      },
+    );
+    ref.afterClosed().subscribe((res) => {
+      if (res) {
+        this.snack.open(
+          '¡Reserva confirmada! La vas a ver en "Mis reservas".',
+          'OK',
+          { duration: 4000 },
+        );
+        // refresca la disponibilidad mostrada (bajó el stock reservado)
+        this.tienda.disponibilidad(variante.id).subscribe((d) => this.disponibilidad.set(d));
+      }
+    });
   }
 }

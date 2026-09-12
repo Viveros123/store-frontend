@@ -31,6 +31,7 @@ import {
   SucursalFormData,
   SucursalFormDialog,
 } from './sucursal-form-dialog';
+import { HorariosDialog, HorariosDialogData } from './horarios-dialog';
 
 @Component({
   selector: 'app-sucursales-page',
@@ -167,6 +168,18 @@ export class SucursalesPage implements OnInit {
           { duration: 2500 },
         );
         this.cargar();
+      }
+    });
+  }
+
+  horarios(s: Sucursal): void {
+    const ref = this.dialog.open<HorariosDialog, HorariosDialogData, boolean>(
+      HorariosDialog,
+      { data: { sucursalId: s.id, sucursalNombre: s.nombre } },
+    );
+    ref.afterClosed().subscribe((ok) => {
+      if (ok) {
+        this.snack.open('Horarios guardados.', 'OK', { duration: 2500 });
       }
     });
   }

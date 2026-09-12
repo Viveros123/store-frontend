@@ -79,7 +79,13 @@
       }
 
       <div class="acciones">
-        <button mat-flat-button class="btn-primario" disabled matTooltip="Disponible próximamente">
+        <button
+          mat-flat-button
+          class="btn-primario"
+          [disabled]="disponibilidad().length === 0"
+          [matTooltip]="disponibilidad().length === 0 ? 'Sin stock en sucursales por ahora' : ''"
+          (click)="reservar()"
+        >
           <mat-icon>event_available</mat-icon> Reservar para probar
         </button>
         <button mat-stroked-button disabled matTooltip="Disponible próximamente">
@@ -88,7 +94,7 @@
       </div>
       <p class="nota-proximamente">
         <mat-icon>info</mat-icon>
-        Reservas y compras se habilitan en los próximos pasos del proyecto.
+        La compra se habilita en los próximos pasos del proyecto.
       </p>
 
       @if (varianteSeleccionada(); as v) {

@@ -4,7 +4,11 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { Page } from '../../core/models/usuario.model';
-import { Sucursal, SucursalOpcion } from '../../core/models/sucursal.model';
+import {
+  HorarioDia,
+  Sucursal,
+  SucursalOpcion,
+} from '../../core/models/sucursal.model';
 
 export interface SucursalCreate {
   nombre: string;
@@ -43,5 +47,14 @@ export class SucursalesService {
 
   actualizar(id: number, dto: SucursalUpdate): Observable<Sucursal> {
     return this.http.patch<Sucursal>(`${this.base}/${id}`, dto);
+  }
+
+  // CU16
+  obtenerHorarios(id: number): Observable<HorarioDia[]> {
+    return this.http.get<HorarioDia[]>(`${this.base}/${id}/horarios`);
+  }
+
+  guardarHorarios(id: number, dias: HorarioDia[]): Observable<HorarioDia[]> {
+    return this.http.put<HorarioDia[]>(`${this.base}/${id}/horarios`, { dias });
   }
 }

@@ -1,0 +1,39 @@
+export interface ItemReserva {
+  variante_id: number;
+  producto_id: number | null;
+  producto: string | null;
+  talla: string | null;
+  color: string | null;
+  sku: string | null;
+  cantidad: number;
+}
+
+export type EstadoReserva =
+  | 'PENDIENTE'
+  | 'NOTIFICADA'
+  | 'PREPARADA'
+  | 'ATENDIDA'
+  | 'COMPLETADA'
+  | 'CANCELADA'
+  | 'EXPIRADA';
+
+export interface Reserva {
+  id: number;
+  sucursal_id: number;
+  sucursal: string | null;
+  ciudad: string | null;
+  fecha: string; // "YYYY-MM-DD"
+  hora_inicio: string; // "HH:MM:SS"
+  hora_fin: string;
+  duracion_minutos: number;
+  estado: EstadoReserva;
+  fecha_creacion: string;
+  items: ItemReserva[];
+}
+
+export interface SlotsDisponibilidad {
+  fecha: string;
+  duracion_minutos: number;
+  cerrado: boolean;
+  slots: string[]; // "HH:MM:SS"
+}

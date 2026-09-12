@@ -38,6 +38,11 @@
           <mat-icon>dashboard</mat-icon> Portal proveedor
         </button>
       }
+      @if (esCliente()) {
+        <button mat-menu-item routerLink="/mis-reservas">
+          <mat-icon>event_note</mat-icon> Mis reservas
+        </button>
+      }
       <button mat-menu-item routerLink="/mi-cuenta">
         <mat-icon>person</mat-icon> Mi cuenta
       </button>

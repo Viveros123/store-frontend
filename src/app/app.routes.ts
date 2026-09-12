@@ -55,6 +55,14 @@ export const routes: Routes = [
       import('./features/identidad/mi-cuenta/mi-cuenta').then((m) => m.MiCuenta),
   },
   {
+    path: 'mis-reservas',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/reservas/mis-reservas-page').then(
+        (m) => m.MisReservasPage,
+      ),
+  },
+  {
     path: 'proveedor',
     canActivate: [proveedorGuard],
     loadComponent: () =>
