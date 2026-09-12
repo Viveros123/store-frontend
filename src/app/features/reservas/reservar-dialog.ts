@@ -151,8 +151,9 @@ function fechaISO(d: Date): string {
   styles: `
     .prenda { margin: 0 0 .75rem; }
     .detalle { color: #64748b; margin-left: .4rem; font-size: .9rem; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem 1rem; min-width: min(480px, 86vw); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; align-items: start; column-gap: 1rem; row-gap: 1.5rem; min-width: min(480px, 86vw); }
     mat-form-field { width: 100%; }
+    mat-form-field mat-hint { line-height: 1.3; }
     .slots { margin-top: .5rem; }
     .etiqueta { display: block; font-size: .8rem; font-weight: 600; color: #334155; margin-bottom: .5rem; }
     .opciones-slot { display: flex; gap: .5rem; flex-wrap: wrap; max-height: 160px; overflow-y: auto; }
