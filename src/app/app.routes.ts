@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import {
   adminGuard,
   authGuard,
+  encargadoGuard,
   noAuthGuard,
   proveedorGuard,
   redirectStaffGuard,
@@ -83,6 +84,24 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/portal-proveedor/mi-producto-detalle-page').then(
             (m) => m.MiProductoDetallePage,
+          ),
+      },
+    ],
+  },
+  {
+    path: 'encargado',
+    canActivate: [encargadoGuard],
+    loadComponent: () =>
+      import('./features/encargado/encargado-layout').then(
+        (m) => m.EncargadoLayout,
+      ),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'reservas' },
+      {
+        path: 'reservas',
+        loadComponent: () =>
+          import('./features/encargado/reservas-sucursal-page').then(
+            (m) => m.ReservasSucursalPage,
           ),
       },
     ],

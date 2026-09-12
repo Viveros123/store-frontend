@@ -63,6 +63,7 @@ export class Login {
   private inicioSegunRol(rol: string | null): string {
     if (rol === ROL.ADMIN) return '/admin/usuarios';
     if (rol === ROL.PROVEEDOR) return '/proveedor/productos';
+    if (rol === ROL.ENCARGADO) return '/encargado/reservas';
     return '/';
   }
 

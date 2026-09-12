@@ -37,6 +37,17 @@ export const proveedorGuard: CanActivateFn = (_route, state) => {
   });
 };
 
+/** Requiere rol EncargadoSucursal (panel de la sucursal). */
+export const encargadoGuard: CanActivateFn = (_route, state) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  if (auth.hasRole(ROL.ENCARGADO)) return true;
+  if (auth.isAuthenticated()) return router.createUrlTree(['/']);
+  return router.createUrlTree(['/ingresar'], {
+    queryParams: { returnUrl: state.url },
+  });
+};
+
 /** Para login/registro: si ya hay sesión, no tiene sentido mostrarlos. */
 export const noAuthGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
@@ -55,5 +66,6 @@ export const redirectStaffGuard: CanActivateFn = () => {
   const router = inject(Router);
   if (auth.hasRole(ROL.ADMIN)) return router.createUrlTree(['/admin/usuarios']);
   if (auth.hasRole(ROL.PROVEEDOR)) return router.createUrlTree(['/proveedor/productos']);
+  if (auth.hasRole(ROL.ENCARGADO)) return router.createUrlTree(['/encargado/reservas']);
   return true;
 };

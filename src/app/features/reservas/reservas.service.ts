@@ -5,8 +5,10 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   Reserva,
+  ReservaSucursal,
   SlotsDisponibilidad,
 } from '../../core/models/reserva.model';
+import { Page } from '../../core/models/usuario.model';
 
 export interface ReservaItemDto {
   variante_id: number;
@@ -50,5 +52,28 @@ export class ReservasService {
 
   cancelar(id: number): Observable<Reserva> {
     return this.http.post<Reserva>(`${this.base}/${id}/cancelar`, {});
+  }
+
+  // CU18/CU19 — vista de la sucursal
+  listarSucursal(f: {
+    sucursal_id?: number | null;
+    estado?: string | null;
+    page: number;
+    size: number;
+  }): Observable<Page<ReservaSucursal>> {
+    let params = new HttpParams().set('page', f.page).set('size', f.size);
+    if (f.sucursal_id != null) params = params.set('sucursal_id', f.sucursal_id);
+    if (f.estado) params = params.set('estado', f.estado);
+    return this.http.get<Page<ReservaSucursal>>(`${this.base}/sucursal`, {
+      params,
+    });
+  }
+
+  notificar(id: number): Observable<ReservaSucursal> {
+    return this.http.post<ReservaSucursal>(`${this.base}/${id}/notificar`, {});
+  }
+
+  recepcionar(id: number): Observable<ReservaSucursal> {
+    return this.http.post<ReservaSucursal>(`${this.base}/${id}/recepcionar`, {});
   }
 }

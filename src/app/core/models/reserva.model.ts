@@ -37,3 +37,10 @@ export interface SlotsDisponibilidad {
   cerrado: boolean;
   slots: string[]; // "HH:MM:SS"
 }
+
+// CU18/CU19 — vista de la sucursal (encargado/admin)
+export interface ReservaSucursal extends Reserva {
+  cliente_id: number;
+  cliente: string | null;
+  cliente_telefono: string | null;
+}
