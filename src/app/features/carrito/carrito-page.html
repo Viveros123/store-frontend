@@ -87,8 +87,9 @@
       <button
         mat-flat-button
         class="btn-primario"
-        disabled
-        matTooltip="La compra se habilita en los próximos pasos del proyecto"
+        [disabled]="hayNoDisponibles()"
+        [matTooltip]="hayNoDisponibles() ? 'Quitá las prendas sin stock para continuar' : ''"
+        (click)="irACheckout()"
       >
         <mat-icon>shopping_cart_checkout</mat-icon> Finalizar compra
       </button>

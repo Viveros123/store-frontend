@@ -70,6 +70,28 @@ export const routes: Routes = [
       import('./features/carrito/carrito-page').then((m) => m.CarritoPage),
   },
   {
+    path: 'checkout',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/ventas/checkout-page').then((m) => m.CheckoutPage),
+  },
+  {
+    path: 'checkout/resultado',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/ventas/checkout-resultado-page').then(
+        (m) => m.CheckoutResultadoPage,
+      ),
+  },
+  {
+    path: 'mis-compras',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/ventas/mis-compras-page').then(
+        (m) => m.MisComprasPage,
+      ),
+  },
+  {
     path: 'proveedor',
     canActivate: [proveedorGuard],
     loadComponent: () =>

@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Location, DecimalPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,6 +30,7 @@ export class CarritoPage {
   private readonly service = inject(CarritoService);
   private readonly location = inject(Location);
   private readonly snack = inject(MatSnackBar);
+  private readonly router = inject(Router);
 
   protected readonly cargando = signal(true);
   protected readonly actualizando = signal<number | null>(null);
@@ -87,6 +88,11 @@ export class CarritoPage {
       next: () => this.snack.open('Carrito vacío.', 'OK', { duration: 2000 }),
       error: (e: unknown) => this.mostrarError(e),
     });
+  }
+
+  irACheckout(): void {
+    if (this.hayNoDisponibles() || this.items().length === 0) return;
+    void this.router.navigate(['/checkout']);
   }
 
   private mostrarError(e: unknown): void {
