@@ -113,10 +113,11 @@
               <td mat-cell *matCellDef="let v">{{ v.sku }}</td>
             </ng-container>
             <ng-container matColumnDef="precio">
-              <th mat-header-cell *matHeaderCellDef>Precio</th>
+              <th mat-header-cell *matHeaderCellDef>Precio que nos vendés</th>
               <td mat-cell *matCellDef="let v">
-                @if (v.precio) {
-                  Bs {{ +v.precio | number: '1.2-2' }}
+                @if (v.precio_compra_efectivo) {
+                  Bs {{ +v.precio_compra_efectivo | number: '1.2-2' }}
+                  @if (!v.precio_compra) { <span class="hint-base">(general)</span> }
                 } @else {
                   <span class="hint-base">—</span>
                 }

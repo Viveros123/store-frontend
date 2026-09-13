@@ -77,6 +77,15 @@ export interface VarianteDialogData {
           </mat-form-field>
         }
 
+        @if (data.portal) {
+          <mat-form-field appearance="outline" class="col-2">
+            <mat-label>Precio que nos vendés esta talla/color (opcional)</mat-label>
+            <span matTextPrefix>Bs&nbsp;</span>
+            <input matInput type="number" step="0.01" formControlName="precio_compra" />
+            <mat-hint>Si lo dejás vacío, usa el precio general del producto.</mat-hint>
+          </mat-form-field>
+        }
+
         <mat-form-field appearance="outline" class="col-2">
           <mat-label>URL de imagen (opcional)</mat-label>
           <input matInput formControlName="imagen_url" placeholder="https://…" />
@@ -132,6 +141,7 @@ export class VarianteDialog {
     color_id: [this.v?.color_id ?? (null as number | null), [Validators.required]],
     sku: [this.v?.sku ?? '', [Validators.required]],
     precio: [this.v?.precio ?? ''],
+    precio_compra: [this.v?.precio_compra ?? ''],
     imagen_url: [this.v?.imagen_url ?? ''],
   });
 
@@ -148,6 +158,7 @@ export class VarianteDialog {
       color_id: val.color_id!,
       sku: val.sku.trim(),
       precio: val.precio ? String(val.precio) : null,
+      precio_compra: val.precio_compra ? String(val.precio_compra) : null,
       imagen_url: val.imagen_url?.trim() || null,
     };
     try {

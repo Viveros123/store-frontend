@@ -65,6 +65,7 @@ export class ProductoDetallePage {
     'talla',
     'color',
     'sku',
+    'costo',
     'precio',
     'acciones',
   ];

@@ -29,6 +29,7 @@ export interface VarianteCreate {
   color_id: number;
   sku: string;
   precio?: string | null;
+  precio_compra?: string | null;
   imagen_url?: string | null;
 }
 

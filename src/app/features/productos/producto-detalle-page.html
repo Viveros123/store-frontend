@@ -147,6 +147,17 @@
               <th mat-header-cell *matHeaderCellDef>SKU</th>
               <td mat-cell *matCellDef="let v">{{ v.sku }}</td>
             </ng-container>
+            <ng-container matColumnDef="costo">
+              <th mat-header-cell *matHeaderCellDef>Costo</th>
+              <td mat-cell *matCellDef="let v">
+                @if (v.precio_compra_efectivo) {
+                  Bs {{ +v.precio_compra_efectivo | number: '1.2-2' }}
+                  @if (!v.precio_compra) { <span class="hint-base">(general)</span> }
+                } @else {
+                  <span class="hint-base">—</span>
+                }
+              </td>
+            </ng-container>
             <ng-container matColumnDef="precio">
               <th mat-header-cell *matHeaderCellDef>Precio</th>
               <td mat-cell *matCellDef="let v">

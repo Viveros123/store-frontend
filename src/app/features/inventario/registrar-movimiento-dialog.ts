@@ -55,7 +55,7 @@ export interface RegistrarMovimientoDialogData {
 
         <mat-form-field appearance="outline" class="col-2">
           <mat-label>Variante (talla / color)</mat-label>
-          <mat-select formControlName="variante_id">
+          <mat-select formControlName="variante_id" (selectionChange)="onVariante($event.value)">
             @if (cargandoVariantes()) {
               <mat-option [disabled]="true">Cargando…</mat-option>
             }
@@ -174,6 +174,16 @@ export class RegistrarMovimientoDialog {
       },
       error: () => this.cargandoVariantes.set(false),
     });
+  }
+
+  onVariante(varianteId: number): void {
+    // El costo de ESTA talla/color puntual (si el proveedor lo cargó) es más
+    // preciso que el general del producto; si no lo tiene, se mantiene la
+    // sugerencia general que ya se puso al elegir el producto.
+    const variante = this.variantes().find((v) => v.id === varianteId);
+    if (variante?.precio_compra_efectivo) {
+      this.form.controls.costo_unitario.setValue(variante.precio_compra_efectivo);
+    }
   }
 
   async guardar(): Promise<void> {

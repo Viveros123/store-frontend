@@ -29,6 +29,8 @@ export interface Variante {
   sku: string;
   precio: string | null;
   precio_efectivo: string | null;
+  precio_compra: string | null;
+  precio_compra_efectivo: string | null;
   imagen_url: string | null;
   imagen_efectivo: string | null;
 }
