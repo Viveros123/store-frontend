@@ -63,7 +63,9 @@
 
       <ng-container matColumnDef="cantidad">
         <th mat-header-cell *matHeaderCellDef>Cantidad</th>
-        <td mat-cell *matCellDef="let m">+{{ m.cantidad }}</td>
+        <td mat-cell *matCellDef="let m" [class.cant-resta]="signoCantidad(m.tipo) === '-'">
+          {{ signoCantidad(m.tipo) }}{{ m.cantidad }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="costo">
