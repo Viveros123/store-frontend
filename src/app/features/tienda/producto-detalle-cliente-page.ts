@@ -21,6 +21,7 @@ import {
   ReservarDialog,
   ReservarDialogData,
 } from '../reservas/reservar-dialog';
+import { CarritoService } from '../carrito/carrito.service';
 
 @Component({
   selector: 'app-producto-detalle-cliente-page',
@@ -42,6 +43,9 @@ export class ProductoDetalleClientePage {
   private readonly auth = inject(AuthService);
   private readonly dialog = inject(MatDialog);
   private readonly snack = inject(MatSnackBar);
+  private readonly carritoSvc = inject(CarritoService);
+
+  protected readonly agregandoCarrito = signal(false);
 
   protected readonly cargando = signal(true);
   protected readonly noEncontrado = signal(false);
@@ -171,6 +175,44 @@ export class ProductoDetalleClientePage {
         // refresca la disponibilidad mostrada (bajó el stock reservado)
         this.tienda.disponibilidad(variante.id).subscribe((d) => this.disponibilidad.set(d));
       }
+    });
+  }
+
+  agregarAlCarrito(): void {
+    if (!this.auth.isAuthenticated()) {
+      void this.router.navigate(['/ingresar'], {
+        queryParams: { returnUrl: this.router.url },
+      });
+      return;
+    }
+    if (!this.auth.hasRole(ROL.CLIENTE)) {
+      this.snack.open(
+        'Comprar está disponible solo para cuentas de cliente.',
+        'Cerrar',
+        { duration: 4000 },
+      );
+      return;
+    }
+    const variante = this.varianteSeleccionada();
+    if (!variante) return;
+
+    this.agregandoCarrito.set(true);
+    this.carritoSvc.agregar({ variante_id: variante.id, cantidad: 1 }).subscribe({
+      next: () => {
+        this.agregandoCarrito.set(false);
+        this.snack.open('Se agregó al carrito.', 'Ver carrito', {
+          duration: 3500,
+        }).onAction().subscribe(() => void this.router.navigate(['/carrito']));
+      },
+      error: (e: unknown) => {
+        this.agregandoCarrito.set(false);
+        this.snack.open(
+          (e as { error?: { detail?: string } }).error?.detail ??
+            'No se pudo agregar al carrito.',
+          'Cerrar',
+          { duration: 4000 },
+        );
+      },
     });
   }
 }

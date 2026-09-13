@@ -64,6 +64,12 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'carrito',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/carrito/carrito-page').then((m) => m.CarritoPage),
+  },
+  {
     path: 'proveedor',
     canActivate: [proveedorGuard],
     loadComponent: () =>

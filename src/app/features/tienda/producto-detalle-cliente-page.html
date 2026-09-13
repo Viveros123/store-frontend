@@ -88,13 +88,18 @@
         >
           <mat-icon>event_available</mat-icon> Reservar para probar
         </button>
-        <button mat-stroked-button disabled matTooltip="Disponible próximamente">
-          <mat-icon>shopping_bag</mat-icon> Comprar
+        <button
+          mat-stroked-button
+          [disabled]="disponibilidad().length === 0 || agregandoCarrito()"
+          [matTooltip]="disponibilidad().length === 0 ? 'Sin stock en sucursales por ahora' : ''"
+          (click)="agregarAlCarrito()"
+        >
+          <mat-icon>shopping_bag</mat-icon> Agregar al carrito
         </button>
       </div>
       <p class="nota-proximamente">
         <mat-icon>info</mat-icon>
-        La compra se habilita en los próximos pasos del proyecto.
+        El pago se habilita en los próximos pasos del proyecto — por ahora podés armar tu carrito.
       </p>
 
       @if (varianteSeleccionada(); as v) {
