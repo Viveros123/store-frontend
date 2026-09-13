@@ -104,6 +104,20 @@ export const routes: Routes = [
             (m) => m.ReservasSucursalPage,
           ),
       },
+      {
+        path: 'inventario',
+        loadComponent: () =>
+          import('./features/inventario/inventario-page').then(
+            (m) => m.InventarioPage,
+          ),
+      },
+      {
+        path: 'movimientos',
+        loadComponent: () =>
+          import('./features/inventario/movimientos-page').then(
+            (m) => m.MovimientosPage,
+          ),
+      },
     ],
   },
   {

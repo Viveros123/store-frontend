@@ -22,7 +22,12 @@ import { SucursalOpcion } from '../../core/models/sucursal.model';
 import { MovimientoInventario } from '../../core/models/inventario.model';
 import { InventarioService } from './inventario.service';
 import { SucursalesService } from '../sucursales/sucursales.service';
-import { RegistrarMovimientoDialog } from './registrar-movimiento-dialog';
+import {
+  RegistrarMovimientoDialog,
+  RegistrarMovimientoDialogData,
+} from './registrar-movimiento-dialog';
+import { AuthService } from '../../core/auth/auth.service';
+import { ROL } from '../../core/models/usuario.model';
 
 @Component({
   selector: 'app-movimientos-page',
@@ -45,6 +50,11 @@ export class MovimientosPage implements OnInit {
   private readonly sucursalesSvc = inject(SucursalesService);
   private readonly dialog = inject(MatDialog);
   private readonly snack = inject(MatSnackBar);
+  private readonly auth = inject(AuthService);
+
+  /** El encargado solo ve/opera sobre su propia sucursal. */
+  protected readonly esEncargado = computed(() => this.auth.hasRole(ROL.ENCARGADO));
+  private readonly miSucursalId = computed(() => this.auth.user()?.sucursal_id ?? null);
 
   protected readonly columnas = [
     'fecha',
@@ -74,6 +84,9 @@ export class MovimientosPage implements OnInit {
   );
 
   ngOnInit(): void {
+    if (this.esEncargado()) {
+      this.sucursalId.set(this.miSucursalId());
+    }
     this.cargar();
   }
 
@@ -124,8 +137,13 @@ export class MovimientosPage implements OnInit {
   }
 
   registrar(): void {
-    const ref = this.dialog.open(RegistrarMovimientoDialog, {
-      data: {},
+    const ref = this.dialog.open<
+      RegistrarMovimientoDialog,
+      RegistrarMovimientoDialogData
+    >(RegistrarMovimientoDialog, {
+      data: {
+        sucursalFija: this.esEncargado() ? this.miSucursalId() ?? undefined : undefined,
+      },
       autoFocus: 'first-tabbable',
     });
     ref.afterClosed().subscribe((res) => {

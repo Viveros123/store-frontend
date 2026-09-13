@@ -23,6 +23,9 @@ import { InventarioService } from './inventario.service';
 export interface AjustarStockDialogData {
   /** Precarga (al ajustar desde la fila de la tabla). */
   item?: InventarioItem;
+  /** Si viene seteada, el select de sucursal queda bloqueado en ese valor
+   * (caso encargado de sucursal, que solo puede ajustar la suya). */
+  sucursalFija?: number;
 }
 
 @Component({
@@ -138,7 +141,10 @@ export class AjustarStockDialog {
   protected readonly form = this.fb.nonNullable.group({
     producto_id: [this.item?.producto_id ?? (null as number | null), [Validators.required]],
     variante_id: [this.item?.variante_id ?? (null as number | null), [Validators.required]],
-    sucursal_id: [this.item?.sucursal_id ?? (null as number | null), [Validators.required]],
+    sucursal_id: [
+      this.item?.sucursal_id ?? this.data.sucursalFija ?? (null as number | null),
+      [Validators.required],
+    ],
     cantidad_disponible: [
       this.item?.cantidad_disponible ?? 0,
       [Validators.required, Validators.min(0)],
@@ -146,6 +152,9 @@ export class AjustarStockDialog {
   });
 
   constructor() {
+    if (this.data.sucursalFija != null) {
+      this.form.controls.sucursal_id.disable();
+    }
     if (this.item?.producto_id) {
       this.onProducto(this.item.producto_id);
     }

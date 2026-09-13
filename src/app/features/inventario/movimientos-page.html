@@ -10,17 +10,19 @@
   </button>
 </header>
 
-<section class="filtros">
-  <mat-form-field appearance="outline" class="f-sucursal">
-    <mat-label>Sucursal</mat-label>
-    <mat-select [value]="sucursalId()" (valueChange)="cambiarSucursal($event)">
-      <mat-option [value]="null">Todas</mat-option>
-      @for (s of sucursales(); track s.id) {
-        <mat-option [value]="s.id">{{ s.nombre }} — {{ s.ciudad }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-</section>
+@if (!esEncargado()) {
+  <section class="filtros">
+    <mat-form-field appearance="outline" class="f-sucursal">
+      <mat-label>Sucursal</mat-label>
+      <mat-select [value]="sucursalId()" (valueChange)="cambiarSucursal($event)">
+        <mat-option [value]="null">Todas</mat-option>
+        @for (s of sucursales(); track s.id) {
+          <mat-option [value]="s.id">{{ s.nombre }} — {{ s.ciudad }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </section>
+}
 
 <div class="tabla-wrap mat-elevation-z1">
   @if (cargando()) {

@@ -31,7 +31,9 @@ import { SucursalOpcion } from '../../core/models/sucursal.model';
 import { InventarioItem } from '../../core/models/inventario.model';
 import { InventarioService } from './inventario.service';
 import { SucursalesService } from '../sucursales/sucursales.service';
-import { AjustarStockDialog } from './ajustar-stock-dialog';
+import { AjustarStockDialog, AjustarStockDialogData } from './ajustar-stock-dialog';
+import { AuthService } from '../../core/auth/auth.service';
+import { ROL } from '../../core/models/usuario.model';
 
 @Component({
   selector: 'app-inventario-page',
@@ -57,6 +59,11 @@ export class InventarioPage implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly snack = inject(MatSnackBar);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly auth = inject(AuthService);
+
+  /** El encargado solo ve/opera sobre su propia sucursal. */
+  protected readonly esEncargado = computed(() => this.auth.hasRole(ROL.ENCARGADO));
+  private readonly miSucursalId = computed(() => this.auth.user()?.sucursal_id ?? null);
 
   private readonly buscador =
     viewChild<ElementRef<HTMLInputElement>>('buscador');
@@ -90,6 +97,9 @@ export class InventarioPage implements OnInit {
   );
 
   ngOnInit(): void {
+    if (this.esEncargado()) {
+      this.sucursalId.set(this.miSucursalId());
+    }
     this.qCtrl.valueChanges
       .pipe(
         debounceTime(300),
@@ -152,10 +162,13 @@ export class InventarioPage implements OnInit {
   ajustar(item?: InventarioItem): void {
     const ref = this.dialog.open<
       AjustarStockDialog,
-      { item?: InventarioItem },
+      AjustarStockDialogData,
       InventarioItem | undefined
     >(AjustarStockDialog, {
-      data: { item },
+      data: {
+        item,
+        sucursalFija: this.esEncargado() ? this.miSucursalId() ?? undefined : undefined,
+      },
       autoFocus: 'first-tabbable',
     });
     ref.afterClosed().subscribe((res) => {
