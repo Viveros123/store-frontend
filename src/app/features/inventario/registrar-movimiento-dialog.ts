@@ -85,7 +85,7 @@ export interface RegistrarMovimientoDialogData {
           <mat-label>Costo por unidad (lo que cobró el proveedor)</mat-label>
           <span matTextPrefix>Bs&nbsp;</span>
           <input matInput type="number" min="0.01" step="0.01" formControlName="costo_unitario" />
-          <mat-hint>Se usa para calcular el costo promedio de esta variante en esta sucursal.</mat-hint>
+          <mat-hint>Se sugiere según el precio de referencia del proveedor; ajustalo si la factura real es distinta.</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-2">
@@ -166,6 +166,11 @@ export class RegistrarMovimientoDialog {
       next: (p) => {
         this.variantes.set(p.variantes);
         this.cargandoVariantes.set(false);
+        // Sugerimos el precio que el proveedor cargó como referencia;
+        // el que registra el ingreso lo puede ajustar si la factura real difiere.
+        if (p.precio_compra) {
+          this.form.controls.costo_unitario.setValue(p.precio_compra);
+        }
       },
       error: () => this.cargandoVariantes.set(false),
     });
