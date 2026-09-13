@@ -48,6 +48,17 @@ export const encargadoGuard: CanActivateFn = (_route, state) => {
   });
 };
 
+/** Requiere rol Cajero (panel de caja / venta presencial). */
+export const cajeroGuard: CanActivateFn = (_route, state) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  if (auth.hasRole(ROL.CAJERO)) return true;
+  if (auth.isAuthenticated()) return router.createUrlTree(['/']);
+  return router.createUrlTree(['/ingresar'], {
+    queryParams: { returnUrl: state.url },
+  });
+};
+
 /** Para login/registro: si ya hay sesión, no tiene sentido mostrarlos. */
 export const noAuthGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
@@ -67,5 +78,6 @@ export const redirectStaffGuard: CanActivateFn = () => {
   if (auth.hasRole(ROL.ADMIN)) return router.createUrlTree(['/admin/usuarios']);
   if (auth.hasRole(ROL.PROVEEDOR)) return router.createUrlTree(['/proveedor/productos']);
   if (auth.hasRole(ROL.ENCARGADO)) return router.createUrlTree(['/encargado/reservas']);
+  if (auth.hasRole(ROL.CAJERO)) return router.createUrlTree(['/caja/nueva-venta']);
   return true;
 };

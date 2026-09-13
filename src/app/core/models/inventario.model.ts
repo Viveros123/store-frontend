@@ -35,7 +35,7 @@ export interface MovimientoInventario {
   sucursal_id: number;
   sucursal: string | null;
   ciudad: string | null;
-  tipo: 'INGRESO' | 'AJUSTE' | 'SALIDA_VENTA' | 'LIBERACION_RESERVA';
+  tipo: 'INGRESO' | 'AJUSTE' | 'SALIDA_VENTA' | 'LIBERACION_RESERVA' | 'ANULACION_VENTA';
   cantidad: number;
   costo_unitario: string | null;
   nota: string | null;

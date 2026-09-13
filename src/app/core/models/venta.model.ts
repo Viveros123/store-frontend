@@ -43,3 +43,34 @@ export interface EstadoPagoInfo {
   pago_id: number | null;
   pago_estado: EstadoPago | null;
 }
+
+// CU24/25/26 — panel de Cajero
+export interface ClienteBuscado {
+  id: number;
+  nombre: string;
+  apellido: string;
+  email: string;
+  telefono: string | null;
+}
+
+export interface VentaCaja extends Venta {
+  cliente_id: number;
+  cliente_nombre: string;
+  cajero_nombre: string | null;
+}
+
+export interface Comprobante {
+  venta_id: number;
+  fecha_creacion: string;
+  sucursal: string;
+  ciudad: string;
+  direccion: string;
+  cliente_nombre: string;
+  cliente_email: string;
+  cajero_nombre: string | null;
+  items: ItemVenta[];
+  total: string;
+  metodo_pago: string;
+  monto_recibido: string | null;
+  vuelto: string | null;
+}

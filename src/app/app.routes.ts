@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import {
   adminGuard,
   authGuard,
+  cajeroGuard,
   encargadoGuard,
   noAuthGuard,
   proveedorGuard,
@@ -144,6 +145,36 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/inventario/movimientos-page').then(
             (m) => m.MovimientosPage,
+          ),
+      },
+    ],
+  },
+  {
+    path: 'caja',
+    canActivate: [cajeroGuard],
+    loadComponent: () =>
+      import('./features/caja/caja-layout').then((m) => m.CajaLayout),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'nueva-venta' },
+      {
+        path: 'nueva-venta',
+        loadComponent: () =>
+          import('./features/caja/nueva-venta-page').then(
+            (m) => m.NuevaVentaPage,
+          ),
+      },
+      {
+        path: 'historial',
+        loadComponent: () =>
+          import('./features/caja/historial-caja-page').then(
+            (m) => m.HistorialCajaPage,
+          ),
+      },
+      {
+        path: 'comprobante/:id',
+        loadComponent: () =>
+          import('./features/caja/comprobante-page').then(
+            (m) => m.ComprobantePage,
           ),
       },
     ],

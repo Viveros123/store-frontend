@@ -33,6 +33,7 @@ export class TiendaLayout {
   protected readonly esAdmin = () => this.auth.hasRole(ROL.ADMIN);
   protected readonly esProveedor = () => this.auth.hasRole(ROL.PROVEEDOR);
   protected readonly esEncargado = () => this.auth.hasRole(ROL.ENCARGADO);
+  protected readonly esCajero = () => this.auth.hasRole(ROL.CAJERO);
   protected readonly esCliente = () => this.auth.hasRole(ROL.CLIENTE);
   protected readonly cantidadCarrito = this.carritoSvc.cantidadItems;
 

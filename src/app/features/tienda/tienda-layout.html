@@ -21,6 +21,9 @@
     @if (esEncargado()) {
       <button mat-button routerLink="/encargado" class="hide-xs">Panel de sucursal</button>
     }
+    @if (esCajero()) {
+      <button mat-button routerLink="/caja" class="hide-xs">Panel de caja</button>
+    }
     @if (esCliente()) {
       <a mat-icon-button routerLink="/carrito" aria-label="Mi carrito">
         <mat-icon [matBadge]="cantidadCarrito() || null" matBadgeColor="accent" matBadgeSize="small">
@@ -51,6 +54,11 @@
       @if (esEncargado()) {
         <button mat-menu-item routerLink="/encargado">
           <mat-icon>dashboard</mat-icon> Panel de sucursal
+        </button>
+      }
+      @if (esCajero()) {
+        <button mat-menu-item routerLink="/caja">
+          <mat-icon>dashboard</mat-icon> Panel de caja
         </button>
       }
       @if (esCliente()) {
