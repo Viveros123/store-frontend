@@ -21,5 +21,6 @@ export class EncargadoLayout {
       icon: 'sync_alt',
       link: '/encargado/movimientos',
     },
+    { label: 'Ventas', icon: 'point_of_sale', link: '/encargado/ventas' },
   ];
 }

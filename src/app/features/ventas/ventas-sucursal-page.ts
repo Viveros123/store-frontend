@@ -1,63 +1,57 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../core/auth/auth.service';
 import { ROL } from '../../core/models/usuario.model';
 import { SucursalOpcion } from '../../core/models/sucursal.model';
-import { ReservaSucursal } from '../../core/models/reserva.model';
+import { VentaCaja } from '../../core/models/venta.model';
 import { SucursalesService } from '../sucursales/sucursales.service';
-import { ReservasService } from '../reservas/reservas.service';
+import { VentasService } from './ventas.service';
 
 const ETIQUETA_ESTADO: Record<string, string> = {
-  PENDIENTE: 'Pendiente',
-  NOTIFICADA: 'Notificada',
-  PREPARADA: 'Preparada',
-  ATENDIDA: 'Atendida',
+  PENDIENTE_PAGO: 'Pendiente de pago',
+  PAGADA: 'Pagada',
   COMPLETADA: 'Completada',
-  CANCELADA: 'Cancelada',
-  EXPIRADA: 'Vencida',
+  ANULADA: 'Anulada',
 };
 
 @Component({
-  selector: 'app-reservas-sucursal-page',
+  selector: 'app-ventas-sucursal-page',
   imports: [
     DatePipe,
+    DecimalPipe,
     MatFormFieldModule,
     MatSelectModule,
-    MatButtonModule,
     MatIconModule,
     MatTableModule,
     MatPaginatorModule,
     MatProgressBarModule,
-    MatTooltipModule,
   ],
-  templateUrl: './reservas-sucursal-page.html',
-  styleUrl: './reservas-sucursal-page.scss',
+  templateUrl: './ventas-sucursal-page.html',
+  styleUrl: './ventas-sucursal-page.scss',
 })
-export class ReservasSucursalPage implements OnInit {
-  private readonly service = inject(ReservasService);
+export class VentasSucursalPage implements OnInit {
+  private readonly service = inject(VentasService);
   private readonly sucursalesSvc = inject(SucursalesService);
   private readonly auth = inject(AuthService);
   private readonly snack = inject(MatSnackBar);
 
-  /** El admin ve todas las sucursales (CU36); el encargado solo la suya (CU18/19). */
+  /** El encargado solo ve su propia sucursal (mismo patrón que Inventario/Movimientos). */
   protected readonly esEncargado = computed(() => this.auth.hasRole(ROL.ENCARGADO));
 
   protected readonly columnas = computed(() =>
     this.esEncargado()
-      ? ['fecha', 'cliente', 'items', 'estado', 'acciones']
-      : ['fecha', 'sucursal', 'cliente', 'items', 'estado'],
+      ? ['fecha', 'cliente', 'origen', 'items', 'estado', 'total']
+      : ['fecha', 'sucursal', 'cliente', 'origen', 'items', 'estado', 'total'],
   );
 
   protected readonly sucursales = toSignal(this.sucursalesSvc.opciones(), {
@@ -65,8 +59,7 @@ export class ReservasSucursalPage implements OnInit {
   });
 
   protected readonly cargando = signal(false);
-  protected readonly procesando = signal<number | null>(null);
-  protected readonly reservas = signal<ReservaSucursal[]>([]);
+  protected readonly ventas = signal<VentaCaja[]>([]);
   protected readonly total = signal(0);
   protected readonly page = signal(0);
   protected readonly size = signal(10);
@@ -74,7 +67,7 @@ export class ReservasSucursalPage implements OnInit {
   protected readonly estado = signal<string | null>(null);
 
   protected readonly sinResultados = computed(
-    () => !this.cargando() && this.reservas().length === 0,
+    () => !this.cargando() && this.ventas().length === 0,
   );
 
   ngOnInit(): void {
@@ -103,6 +96,10 @@ export class ReservasSucursalPage implements OnInit {
     return ETIQUETA_ESTADO[estado] ?? estado;
   }
 
+  origen(v: VentaCaja): string {
+    return v.cajero_nombre ? `Presencial · ${v.cajero_nombre}` : 'Web';
+  }
+
   private cargar(): void {
     this.cargando.set(true);
     this.service
@@ -114,7 +111,7 @@ export class ReservasSucursalPage implements OnInit {
       })
       .subscribe({
         next: (res) => {
-          this.reservas.set(res.items);
+          this.ventas.set(res.items);
           this.total.set(res.total);
           this.cargando.set(false);
         },
@@ -122,55 +119,11 @@ export class ReservasSucursalPage implements OnInit {
           this.cargando.set(false);
           this.snack.open(
             (e as { error?: { detail?: string } }).error?.detail ??
-              'No se pudieron cargar las reservas.',
+              'No se pudieron cargar las ventas.',
             'Cerrar',
             { duration: 4000 },
           );
         },
       });
-  }
-
-  notificar(r: ReservaSucursal): void {
-    this.procesando.set(r.id);
-    this.service.notificar(r.id).subscribe({
-      next: (actualizada) => {
-        this.reservas.update((lista) =>
-          lista.map((x) => (x.id === actualizada.id ? actualizada : x)),
-        );
-        this.procesando.set(null);
-        this.snack.open('Reserva notificada.', 'OK', { duration: 2500 });
-      },
-      error: (e: unknown) => {
-        this.procesando.set(null);
-        this.snack.open(
-          (e as { error?: { detail?: string } }).error?.detail ??
-            'No se pudo notificar la reserva.',
-          'Cerrar',
-          { duration: 4000 },
-        );
-      },
-    });
-  }
-
-  recepcionar(r: ReservaSucursal): void {
-    this.procesando.set(r.id);
-    this.service.recepcionar(r.id).subscribe({
-      next: (actualizada) => {
-        this.reservas.update((lista) =>
-          lista.map((x) => (x.id === actualizada.id ? actualizada : x)),
-        );
-        this.procesando.set(null);
-        this.snack.open('Reserva recepcionada.', 'OK', { duration: 2500 });
-      },
-      error: (e: unknown) => {
-        this.procesando.set(null);
-        this.snack.open(
-          (e as { error?: { detail?: string } }).error?.detail ??
-            'No se pudo recepcionar la reserva.',
-          'Cerrar',
-          { duration: 4000 },
-        );
-      },
-    });
   }
 }

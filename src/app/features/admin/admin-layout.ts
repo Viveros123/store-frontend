@@ -24,6 +24,8 @@ export class AdminLayout {
       icon: 'sync_alt',
       link: '/admin/movimientos',
     },
+    { label: 'Ventas', icon: 'point_of_sale', link: '/admin/ventas' },
+    { label: 'Reservas', icon: 'event_available', link: '/admin/reservas' },
     { label: 'Datos del catálogo', icon: 'sell', link: '/admin/catalogo-base' },
     {
       label: 'Temporadas y colecciones',

@@ -147,6 +147,13 @@ export const routes: Routes = [
             (m) => m.MovimientosPage,
           ),
       },
+      {
+        path: 'ventas',
+        loadComponent: () =>
+          import('./features/ventas/ventas-sucursal-page').then(
+            (m) => m.VentasSucursalPage,
+          ),
+      },
     ],
   },
   {
@@ -247,6 +254,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/inventario/movimientos-page').then(
             (m) => m.MovimientosPage,
+          ),
+      },
+      {
+        path: 'ventas',
+        loadComponent: () =>
+          import('./features/ventas/ventas-sucursal-page').then(
+            (m) => m.VentasSucursalPage,
+          ),
+      },
+      {
+        path: 'reservas',
+        loadComponent: () =>
+          import('./features/encargado/reservas-sucursal-page').then(
+            (m) => m.ReservasSucursalPage,
           ),
       },
     ],
