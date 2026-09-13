@@ -54,9 +54,28 @@ export class MisComprasPage {
       next: (v) => {
         this.ventas.set(v);
         this.cargando.set(false);
+        this.revisarPendientes(v);
       },
       error: () => this.cargando.set(false),
     });
+  }
+
+  // Cubre el pago completado desde otro dispositivo (QR escaneado con el celular), donde nunca se abrió la pantalla de "resultado" que hace el polling.
+  private revisarPendientes(ventas: Venta[]): void {
+    for (const venta of ventas) {
+      if (venta.estado !== 'PENDIENTE_PAGO') continue;
+      this.service.estadoPago(venta.id).subscribe({
+        next: (info) => {
+          if (info.venta_estado === venta.estado) return;
+          this.ventas.update((lista) =>
+            lista.map((v) =>
+              v.id === venta.id ? { ...v, estado: info.venta_estado } : v,
+            ),
+          );
+        },
+        error: () => {},
+      });
+    }
   }
 
   volver(): void {
