@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, startWith, switchMap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -64,13 +64,14 @@ export class NuevaVentaPage {
 
   // --- Paso 1: cliente -------------------------------------------------- //
   protected readonly clienteQ = new FormControl('', { nonNullable: true });
+  // Con el campo vacío igual se pide la lista (el backend devuelve los
+  // últimos clientes registrados) para que sirva de ayuda antes de escribir.
   protected readonly clienteResultados = toSignal(
     this.clienteQ.valueChanges.pipe(
+      startWith(''),
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((q) =>
-        q.trim().length >= 2 ? this.caja.buscarClientes(q.trim()) : [[] as ClienteBuscado[]],
-      ),
+      switchMap((q) => this.caja.buscarClientes(q.trim())),
     ),
     { initialValue: [] as ClienteBuscado[] },
   );
@@ -128,17 +129,18 @@ export class NuevaVentaPage {
 
   // --- Paso 2: productos -------------------------------------------------- //
   protected readonly productoQ = new FormControl('', { nonNullable: true });
+  // Igual que con clientes: campo vacío = lista por defecto (las prendas
+  // más nuevas del catálogo), como ayuda antes de escribir nada.
   protected readonly productoResultados = toSignal(
     this.productoQ.valueChanges.pipe(
+      startWith(''),
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((q) =>
-        q.trim().length >= 2
-          ? this.tienda.listar({ q: q.trim(), page: 1, size: 8 })
-          : [{ items: [] as CatalogoProducto[], total: 0, page: 1, size: 8 }],
+        this.tienda.listar({ q: q.trim() || undefined, page: 1, size: 10 }),
       ),
     ),
-    { initialValue: { items: [] as CatalogoProducto[], total: 0, page: 1, size: 8 } },
+    { initialValue: { items: [] as CatalogoProducto[], total: 0, page: 1, size: 10 } },
   );
   protected readonly productoElegido = signal<CatalogoProducto | null>(null);
   protected readonly variantesProducto = signal<CatalogoVariante[]>([]);

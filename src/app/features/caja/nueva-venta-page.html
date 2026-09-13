@@ -31,6 +31,9 @@
           </mat-form-field>
 
           @if (clienteResultados().length > 0) {
+            <p class="subtitulo">
+              {{ clienteQ.value.trim() ? 'Resultados' : 'Clientes recientes' }}
+            </p>
             <mat-nav-list class="resultados">
               @for (c of clienteResultados(); track c.id) {
                 <a mat-list-item (click)="elegirCliente(c)">
@@ -39,7 +42,7 @@
                 </a>
               }
             </mat-nav-list>
-          } @else if (clienteQ.value.trim().length >= 2) {
+          } @else {
             <p class="aviso">No se encontró ningún cliente con eso.</p>
           }
 
@@ -115,15 +118,22 @@
           <input matInput [formControl]="productoQ" placeholder="Nombre de la prenda…" />
         </mat-form-field>
 
-        @if (!productoElegido() && productoResultados().items.length > 0) {
-          <mat-nav-list class="resultados">
-            @for (p of productoResultados().items; track p.id) {
-              <a mat-list-item (click)="elegirProducto(p)">
-                <span matListItemTitle>{{ p.nombre }}</span>
-                <span matListItemLine>Bs {{ +p.precio_base | number: '1.2-2' }}</span>
-              </a>
-            }
-          </mat-nav-list>
+        @if (!productoElegido()) {
+          @if (productoResultados().items.length > 0) {
+            <p class="subtitulo">
+              {{ productoQ.value.trim() ? 'Resultados' : 'Prendas del catálogo' }}
+            </p>
+            <mat-nav-list class="resultados">
+              @for (p of productoResultados().items; track p.id) {
+                <a mat-list-item (click)="elegirProducto(p)">
+                  <span matListItemTitle>{{ p.nombre }}</span>
+                  <span matListItemLine>Bs {{ +p.precio_base | number: '1.2-2' }}</span>
+                </a>
+              }
+            </mat-nav-list>
+          } @else {
+            <p class="aviso">No se encontró ninguna prenda con eso.</p>
+          }
         }
 
         @if (productoElegido(); as p) {
@@ -252,6 +262,7 @@
               min="0"
               (input)="montoRecibido.set(+$any($event.target).value || 0)"
             />
+            <mat-hint>A cobrar: Bs {{ total() | number: '1.2-2' }}</mat-hint>
           </mat-form-field>
           @if (vuelto() !== null) {
             <p class="vuelto">Vuelto: Bs {{ vuelto() | number: '1.2-2' }}</p>
