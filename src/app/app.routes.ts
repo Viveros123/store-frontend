@@ -35,6 +35,48 @@ export const routes: Routes = [
             (m) => m.ProductoDetalleClientePage,
           ),
       },
+      {
+        path: 'mi-cuenta',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/identidad/mi-cuenta/mi-cuenta').then((m) => m.MiCuenta),
+      },
+      {
+        path: 'mis-reservas',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/reservas/mis-reservas-page').then(
+            (m) => m.MisReservasPage,
+          ),
+      },
+      {
+        path: 'carrito',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/carrito/carrito-page').then((m) => m.CarritoPage),
+      },
+      {
+        path: 'checkout',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/ventas/checkout-page').then((m) => m.CheckoutPage),
+      },
+      {
+        path: 'checkout/resultado',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/ventas/checkout-resultado-page').then(
+            (m) => m.CheckoutResultadoPage,
+          ),
+      },
+      {
+        path: 'mis-compras',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/ventas/mis-compras-page').then(
+            (m) => m.MisComprasPage,
+          ),
+      },
     ],
   },
   {
@@ -48,48 +90,6 @@ export const routes: Routes = [
     canActivate: [noAuthGuard],
     loadComponent: () =>
       import('./features/identidad/registro/registro').then((m) => m.Registro),
-  },
-  {
-    path: 'mi-cuenta',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/identidad/mi-cuenta/mi-cuenta').then((m) => m.MiCuenta),
-  },
-  {
-    path: 'mis-reservas',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/reservas/mis-reservas-page').then(
-        (m) => m.MisReservasPage,
-      ),
-  },
-  {
-    path: 'carrito',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/carrito/carrito-page').then((m) => m.CarritoPage),
-  },
-  {
-    path: 'checkout',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/ventas/checkout-page').then((m) => m.CheckoutPage),
-  },
-  {
-    path: 'checkout/resultado',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/ventas/checkout-resultado-page').then(
-        (m) => m.CheckoutResultadoPage,
-      ),
-  },
-  {
-    path: 'mis-compras',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/ventas/mis-compras-page').then(
-        (m) => m.MisComprasPage,
-      ),
   },
   {
     path: 'proveedor',
