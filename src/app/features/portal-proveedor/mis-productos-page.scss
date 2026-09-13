@@ -50,6 +50,7 @@ table {
 }
 
 .link {
+  display: inline-block;
   color: var(--fs-green-700);
   font-weight: 500;
   text-decoration: none;
