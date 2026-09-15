@@ -78,6 +78,12 @@ export const routes: Routes = [
             (m) => m.MisComprasPage,
           ),
       },
+      {
+        path: 'asistente',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/ia/asistente-page').then((m) => m.AsistentePage),
+      },
     ],
   },
   {
@@ -268,6 +274,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/encargado/reservas-sucursal-page').then(
             (m) => m.ReservasSucursalPage,
+          ),
+      },
+      {
+        path: 'reportes',
+        loadComponent: () =>
+          import('./features/ia/reporte-voz-page').then(
+            (m) => m.ReporteVozPage,
           ),
       },
     ],

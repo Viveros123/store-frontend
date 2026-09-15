@@ -32,5 +32,6 @@ export class AdminLayout {
       icon: 'calendar_month',
       link: '/admin/temporadas',
     },
+    { label: 'Reportes (IA por voz)', icon: 'mic', link: '/admin/reportes' },
   ];
 }
