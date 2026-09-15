@@ -14,6 +14,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
+import { fechaUtcInterceptor } from './core/http/fecha-utc.interceptor';
 import { AuthService } from './core/auth/auth.service';
 
 registerLocaleData(localeEsBo);
@@ -25,7 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideNativeDateAdapter(),
     { provide: LOCALE_ID, useValue: 'es-BO' },
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([fechaUtcInterceptor, authInterceptor])),
     provideAppInitializer(() => inject(AuthService).restoreSession()),
   ],
 };
