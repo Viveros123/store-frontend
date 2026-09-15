@@ -25,6 +25,7 @@ export interface ProductoMencionado {
 export interface ChatRespuesta {
   respuesta: string;
   productos: ProductoMencionado[];
+  carrito_actualizado: boolean;
 }
 
 export interface ReporteVoz {
