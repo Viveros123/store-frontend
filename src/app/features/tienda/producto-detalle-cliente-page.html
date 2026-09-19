@@ -31,8 +31,19 @@
         <span class="cat">{{ p.categoria }}</span>
       }
       <h1>{{ p.nombre }}</h1>
+      @let vSel = varianteSeleccionada();
+      @let precioNormal = vSel?.precio_efectivo ?? p.precio_base;
+      @let precioPromo = vSel ? vSel.precio_promocional : p.precio_promocional;
       <p class="precio">
-        Bs {{ +(varianteSeleccionada()?.precio_efectivo ?? p.precio_base) | number: '1.2-2' }}
+        @if (precioPromo) {
+          <span class="precio-tachado">Bs {{ +precioNormal | number: '1.2-2' }}</span>
+          <span class="precio-oferta">Bs {{ +precioPromo | number: '1.2-2' }}</span>
+          @if (p.promocion) {
+            <span class="etiqueta-oferta">{{ p.promocion }}</span>
+          }
+        } @else {
+          Bs {{ +precioNormal | number: '1.2-2' }}
+        }
       </p>
 
       @if (p.temporada || p.coleccion) {

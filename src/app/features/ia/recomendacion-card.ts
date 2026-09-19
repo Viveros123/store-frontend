@@ -27,7 +27,15 @@ import { ProductoRecomendado } from '../../core/models/ia.model';
           <span class="cat">{{ producto().categoria }}</span>
         }
         <span class="nombre">{{ producto().nombre }}</span>
-        <span class="precio">Bs {{ +producto().precio_base | number: '1.2-2' }}</span>
+        @let promo = producto().precio_promocional;
+        @if (promo) {
+          <span class="precio">
+            <span class="precio-tachado">Bs {{ +producto().precio_base | number: '1.2-2' }}</span>
+            <span class="precio-oferta">Bs {{ +promo | number: '1.2-2' }}</span>
+          </span>
+        } @else {
+          <span class="precio">Bs {{ +producto().precio_base | number: '1.2-2' }}</span>
+        }
         <p class="motivo">
           <span class="chip-ia">IA</span>
           {{ producto().motivo }}

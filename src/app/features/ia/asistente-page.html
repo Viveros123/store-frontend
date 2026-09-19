@@ -20,7 +20,14 @@
                   }
                   <div>
                     <span class="nombre">{{ p.nombre }}</span>
-                    <span class="precio">Bs {{ +p.precio_base | number: '1.2-2' }}</span>
+                    @if (p.precio_promocional) {
+                      <span class="precio">
+                        <span class="precio-tachado">Bs {{ +p.precio_base | number: '1.2-2' }}</span>
+                        <span class="precio-oferta">Bs {{ +p.precio_promocional | number: '1.2-2' }}</span>
+                      </span>
+                    } @else {
+                      <span class="precio">Bs {{ +p.precio_base | number: '1.2-2' }}</span>
+                    }
                   </div>
                 </a>
               }

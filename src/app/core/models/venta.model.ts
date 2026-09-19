@@ -8,6 +8,7 @@ export interface ItemVenta {
   sku: string | null;
   cantidad: number;
   precio_unitario: string;
+  precio_original: string | null;
   subtotal: string;
 }
 

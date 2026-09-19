@@ -42,7 +42,15 @@
             @if (!item.disponible) {
               <span class="chip-sin-stock">Sin stock</span>
             }
-            <span class="precio">Bs {{ +(item.precio_unitario ?? 0) | number: '1.2-2' }} c/u</span>
+            <span class="precio">
+              @if (item.promocion && item.precio_original) {
+                <span class="precio-tachado">Bs {{ +item.precio_original | number: '1.2-2' }}</span>
+              }
+              Bs {{ +(item.precio_unitario ?? 0) | number: '1.2-2' }} c/u
+            </span>
+            @if (item.promocion) {
+              <span class="etiqueta-oferta">{{ item.promocion }}</span>
+            }
           </div>
 
           <div class="cantidad">

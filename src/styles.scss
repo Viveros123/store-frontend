@@ -36,4 +36,29 @@ body {
   --fs-green-100: #d9f2e6;
   --fs-green-50: #eefaf4;
   --fs-white: #ffffff;
+  --fs-oferta: #c2410c;
+}
+
+// CU33 — precio con promoción (se usa en catálogo, detalle, carrito y chat).
+.precio-tachado {
+  color: #94a3b8;
+  font-weight: 400;
+  text-decoration: line-through;
+  margin-right: 0.35rem;
+}
+
+.precio-oferta {
+  color: var(--fs-oferta);
+}
+
+.etiqueta-oferta {
+  display: inline-block;
+  background: #fff7ed;
+  color: var(--fs-oferta);
+  border: 1px solid #fed7aa;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.05rem 0.5rem;
+  line-height: 1.5;
 }

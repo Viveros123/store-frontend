@@ -277,6 +277,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'promociones',
+        loadComponent: () =>
+          import('./features/promociones/promociones-page').then(
+            (m) => m.PromocionesPage,
+          ),
+      },
+      {
         path: 'reportes',
         loadComponent: () =>
           import('./features/ia/reporte-voz-page').then(

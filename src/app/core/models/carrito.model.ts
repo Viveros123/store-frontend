@@ -8,6 +8,8 @@ export interface ItemCarrito {
   sku: string | null;
   imagen_efectivo: string | null;
   precio_unitario: string | null;
+  precio_original: string | null;
+  promocion: string | null;
   cantidad: number;
   subtotal: string | null;
   disponible: boolean;

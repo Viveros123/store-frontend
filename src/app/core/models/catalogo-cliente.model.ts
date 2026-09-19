@@ -12,6 +12,8 @@ export interface CatalogoProducto {
   coleccion: string | null;
   temporada: string | null;
   precio_base: string;
+  precio_promocional: string | null;
+  promocion: string | null;
   imagen_url: string | null;
   colores: ColorMini[];
   cantidad_variantes: number;
@@ -25,6 +27,7 @@ export interface CatalogoVariante {
   color: string | null;
   color_hex: string | null;
   precio_efectivo: string;
+  precio_promocional: string | null;
   imagen_efectivo: string | null;
 }
 

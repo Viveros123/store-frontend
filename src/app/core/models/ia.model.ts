@@ -6,6 +6,7 @@ export interface ProductoRecomendado {
   categoria: string | null;
   temporada: string | null;
   precio_base: string;
+  precio_promocional: string | null;
   imagen_url: string | null;
   motivo: string;
 }
@@ -19,6 +20,7 @@ export interface ProductoMencionado {
   id: number;
   nombre: string;
   precio_base: string;
+  precio_promocional: string | null;
   imagen_url: string | null;
 }
 

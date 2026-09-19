@@ -25,13 +25,24 @@ import { CatalogoProducto } from '../../core/models/catalogo-cliente.model';
         @if (producto().colores.length > 1) {
           <span class="mas-colores">+{{ producto().colores.length }} colores</span>
         }
+        @if (producto().promocion) {
+          <span class="etiqueta-oferta oferta-badge">Oferta</span>
+        }
       </div>
       <div class="info">
         @if (producto().categoria) {
           <span class="cat">{{ producto().categoria }}</span>
         }
         <span class="nombre">{{ producto().nombre }}</span>
-        <span class="precio">Bs {{ +producto().precio_base | number: '1.2-2' }}</span>
+        @let promo = producto().precio_promocional;
+        @if (promo) {
+          <span class="precio">
+            <span class="precio-tachado">Bs {{ +producto().precio_base | number: '1.2-2' }}</span>
+            <span class="precio-oferta">Bs {{ +promo | number: '1.2-2' }}</span>
+          </span>
+        } @else {
+          <span class="precio">Bs {{ +producto().precio_base | number: '1.2-2' }}</span>
+        }
       </div>
     </a>
   `,
@@ -79,6 +90,12 @@ import { CatalogoProducto } from '../../core/models/catalogo-cliente.model';
       font-size: 0.7rem;
       padding: 0.15rem 0.5rem;
       border-radius: 999px;
+    }
+
+    .oferta-badge {
+      position: absolute;
+      left: 0.5rem;
+      top: 0.5rem;
     }
 
     .info {
