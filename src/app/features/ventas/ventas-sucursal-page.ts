@@ -50,8 +50,8 @@ export class VentasSucursalPage implements OnInit {
 
   protected readonly columnas = computed(() =>
     this.esEncargado()
-      ? ['fecha', 'cliente', 'origen', 'items', 'estado', 'total']
-      : ['fecha', 'sucursal', 'cliente', 'origen', 'items', 'estado', 'total'],
+      ? ['fecha', 'cliente', 'origen', 'items', 'entrega', 'estado', 'total']
+      : ['fecha', 'sucursal', 'cliente', 'origen', 'items', 'entrega', 'estado', 'total'],
   );
 
   protected readonly sucursales = toSignal(this.sucursalesSvc.opciones(), {

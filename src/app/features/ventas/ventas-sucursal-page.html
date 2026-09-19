@@ -69,9 +69,26 @@
                 {{ item.producto }}
                 <span class="detalle">{{ item.talla }} · {{ item.color }}</span>
                 <span class="cant">×{{ item.cantidad }}</span>
+                @if (v.varias_sucursales) {
+                  <span class="detalle">desde {{ item.sucursal }}</span>
+                }
               </li>
             }
           </ul>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="entrega">
+        <th mat-header-cell *matHeaderCellDef>Entrega</th>
+        <td mat-cell *matCellDef="let v">
+          @if (v.direccion_entrega) {
+            {{ v.direccion_entrega }}
+            @if (v.referencia_entrega) {
+              <span class="detalle">({{ v.referencia_entrega }})</span>
+            }
+          } @else {
+            —
+          }
         </td>
       </ng-container>
 

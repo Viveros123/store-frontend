@@ -10,6 +10,7 @@ export interface ItemVenta {
   precio_unitario: string;
   precio_original: string | null;
   subtotal: string;
+  sucursal: string | null;
 }
 
 export type EstadoVenta = 'PENDIENTE_PAGO' | 'PAGADA' | 'COMPLETADA' | 'ANULADA';
@@ -19,6 +20,9 @@ export interface Venta {
   sucursal_id: number;
   sucursal: string | null;
   ciudad: string | null;
+  varias_sucursales: boolean;
+  direccion_entrega: string | null;
+  referencia_entrega: string | null;
   estado: EstadoVenta;
   total: string;
   fecha_creacion: string;

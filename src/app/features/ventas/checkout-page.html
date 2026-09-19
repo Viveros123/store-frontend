@@ -10,7 +10,7 @@
 }
 
 <div class="ck-content">
-  @if (paso() === 'sucursal') {
+  @if (paso() === 'entrega') {
     <section class="resumen">
       <h2>Tu pedido</h2>
       @for (item of items(); track item.id) {
@@ -25,23 +25,39 @@
       </div>
     </section>
 
-    <section class="retiro">
-      <h2>¿Desde qué sucursal despachamos tu compra?</h2>
-      <p class="muted">Pagás online y te enviamos el pedido desde la sucursal que elijas.</p>
+    <section class="entrega">
+      <h2>¿A dónde enviamos tu pedido?</h2>
+      <p class="muted">
+        Pagás online y te lo enviamos. Despachamos desde la sucursal (o sucursales) que tengan
+        stock de tus prendas.
+      </p>
       <mat-form-field appearance="outline">
-        <mat-label>Sucursal de despacho</mat-label>
-        <mat-select [value]="sucursalId()" (valueChange)="sucursalId.set($event)">
-          @for (s of sucursales(); track s.id) {
-            <mat-option [value]="s.id">{{ s.nombre }} — {{ s.ciudad }}</mat-option>
-          }
-        </mat-select>
+        <mat-label>Dirección de entrega</mat-label>
+        <input
+          matInput
+          [formControl]="direccion"
+          maxlength="200"
+          placeholder="Calle, número, zona y ciudad"
+        />
+        @if (direccion.touched && direccion.invalid) {
+          <mat-error>Ingresá una dirección de entrega (mínimo 5 caracteres).</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Referencia (opcional)</mat-label>
+        <input
+          matInput
+          [formControl]="referencia"
+          maxlength="150"
+          placeholder="Ej.: portón azul, frente a la farmacia"
+        />
       </mat-form-field>
     </section>
 
     <button
       mat-flat-button
       class="btn-primario"
-      [disabled]="!sucursalId() || procesando() || items().length === 0"
+      [disabled]="procesando() || items().length === 0"
       (click)="continuarAlPago()"
     >
       <mat-icon>lock</mat-icon>

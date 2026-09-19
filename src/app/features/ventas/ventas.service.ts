@@ -11,9 +11,10 @@ export class VentasService {
   private readonly http = inject(HttpClient);
   private readonly base = `${environment.apiUrl}/ventas`;
 
-  checkout(sucursalId: number): Observable<Venta> {
+  checkout(direccion: string, referencia: string | null): Observable<Venta> {
     return this.http.post<Venta>(`${this.base}/checkout`, {
-      sucursal_id: sucursalId,
+      direccion_entrega: direccion,
+      referencia_entrega: referencia,
     });
   }
 
