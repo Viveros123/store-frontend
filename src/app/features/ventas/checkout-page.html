@@ -26,10 +26,10 @@
     </section>
 
     <section class="retiro">
-      <h2>¿Dónde retirás tu compra?</h2>
-      <p class="muted">No hacemos envíos a domicilio — pagás online y retirás en la sucursal que elijas.</p>
+      <h2>¿Desde qué sucursal despachamos tu compra?</h2>
+      <p class="muted">Pagás online y te enviamos el pedido desde la sucursal que elijas.</p>
       <mat-form-field appearance="outline">
-        <mat-label>Sucursal de retiro</mat-label>
+        <mat-label>Sucursal de despacho</mat-label>
         <mat-select [value]="sucursalId()" (valueChange)="sucursalId.set($event)">
           @for (s of sucursales(); track s.id) {
             <mat-option [value]="s.id">{{ s.nombre }} — {{ s.ciudad }}</mat-option>
