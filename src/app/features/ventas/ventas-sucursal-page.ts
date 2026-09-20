@@ -97,6 +97,7 @@ export class VentasSucursalPage implements OnInit {
   }
 
   origen(v: VentaCaja): string {
+    if (v.reserva_id) return `Reserva #${v.reserva_id}`;
     return v.cajero_nombre ? `Presencial · ${v.cajero_nombre}` : 'Web';
   }
 

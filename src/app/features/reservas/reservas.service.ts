@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import {
+  FinalizarReservaResultado,
   Reserva,
   ReservaSucursal,
   SlotsDisponibilidad,
@@ -75,5 +76,12 @@ export class ReservasService {
 
   recepcionar(id: number): Observable<ReservaSucursal> {
     return this.http.post<ReservaSucursal>(`${this.base}/${id}/recepcionar`, {});
+  }
+
+  finalizar(
+    id: number,
+    items: { detalle_id: number; cantidad_llevada: number }[],
+  ): Observable<FinalizarReservaResultado> {
+    return this.http.post<FinalizarReservaResultado>(`${this.base}/${id}/finalizar`, { items });
   }
 }

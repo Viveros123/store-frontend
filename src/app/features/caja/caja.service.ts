@@ -56,4 +56,13 @@ export class CajaService {
   historial(): Observable<VentaCaja[]> {
     return this.http.get<VentaCaja[]>(`${this.base}/caja/historial`);
   }
+
+  // Ventas de reservas finalizadas, esperando el cobro.
+  porCobrar(): Observable<VentaCaja[]> {
+    return this.http.get<VentaCaja[]>(`${this.base}/caja/por-cobrar`);
+  }
+
+  anular(ventaId: number): Observable<Venta> {
+    return this.http.post<Venta>(`${this.base}/${ventaId}/caja/anular`, {});
+  }
 }

@@ -177,6 +177,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'por-cobrar',
+        loadComponent: () =>
+          import('./features/caja/por-cobrar-page').then(
+            (m) => m.PorCobrarPage,
+          ),
+      },
+      {
         path: 'historial',
         loadComponent: () =>
           import('./features/caja/historial-caja-page').then(

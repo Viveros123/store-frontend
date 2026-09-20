@@ -10,6 +10,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../core/auth/auth.service';
@@ -18,6 +19,7 @@ import { SucursalOpcion } from '../../core/models/sucursal.model';
 import { ReservaSucursal } from '../../core/models/reserva.model';
 import { SucursalesService } from '../sucursales/sucursales.service';
 import { ReservasService } from '../reservas/reservas.service';
+import { FinalizarReservaDialog } from './finalizar-reserva-dialog';
 
 const ETIQUETA_ESTADO: Record<string, string> = {
   PENDIENTE: 'Pendiente',
@@ -50,6 +52,7 @@ export class ReservasSucursalPage implements OnInit {
   private readonly sucursalesSvc = inject(SucursalesService);
   private readonly auth = inject(AuthService);
   private readonly snack = inject(MatSnackBar);
+  private readonly dialog = inject(MatDialog);
 
   /** El admin ve todas las sucursales (CU36); el encargado solo la suya (CU18/19). */
   protected readonly esEncargado = computed(() => this.auth.hasRole(ROL.ENCARGADO));
@@ -149,6 +152,23 @@ export class ReservasSucursalPage implements OnInit {
           { duration: 4000 },
         );
       },
+    });
+  }
+
+  finalizar(r: ReservaSucursal): void {
+    const ref = this.dialog.open(FinalizarReservaDialog, { data: r });
+    ref.afterClosed().subscribe((res) => {
+      if (!res) return;
+      this.reservas.update((lista) =>
+        lista.map((x) => (x.id === res.reserva.id ? res.reserva : x)),
+      );
+      this.snack.open(
+        res.venta_id
+          ? `Reserva finalizada. Se envió a caja la venta #${res.venta_id} (Bs ${(+res.total).toFixed(2)}).`
+          : 'Reserva finalizada. Todas las prendas volvieron al stock.',
+        'OK',
+        { duration: 5000 },
+      );
     });
   }
 

@@ -15,6 +15,7 @@ import { NavItem, PanelShell } from '../shared/panel-shell';
 export class CajaLayout {
   protected readonly nav: NavItem[] = [
     { label: 'Nueva venta', icon: 'point_of_sale', link: '/caja/nueva-venta' },
+    { label: 'Por cobrar', icon: 'pending_actions', link: '/caja/por-cobrar' },
     { label: 'Historial', icon: 'receipt_long', link: '/caja/historial' },
   ];
 }

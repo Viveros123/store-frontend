@@ -1,4 +1,6 @@
 export interface ItemReserva {
+  detalle_id: number;
+  cantidad_llevada: number | null;
   variante_id: number;
   producto_id: number | null;
   producto: string | null;
@@ -43,4 +45,13 @@ export interface ReservaSucursal extends Reserva {
   cliente_id: number;
   cliente: string | null;
   cliente_telefono: string | null;
+}
+
+// CU35 — finalizar la reserva: qué se lleva el cliente y qué devuelve.
+export interface FinalizarReservaResultado {
+  reserva: ReservaSucursal;
+  venta_id: number | null;
+  unidades_llevadas: number;
+  unidades_devueltas: number;
+  total: string;
 }

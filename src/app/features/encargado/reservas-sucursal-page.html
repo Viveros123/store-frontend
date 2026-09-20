@@ -112,6 +112,17 @@
               <mat-icon>how_to_reg</mat-icon> Recepcionar
             </button>
           }
+          @if (r.estado === 'ATENDIDA') {
+            <button
+              mat-flat-button
+              class="btn-primary"
+              [disabled]="procesando() === r.id"
+              matTooltip="El cliente ya se probó las prendas: indicá cuáles se lleva"
+              (click)="finalizar(r)"
+            >
+              <mat-icon>inventory_2</mat-icon> Finalizar
+            </button>
+          }
         </td>
       </ng-container>
 

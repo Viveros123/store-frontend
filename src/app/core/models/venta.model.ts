@@ -21,6 +21,7 @@ export interface Venta {
   sucursal: string | null;
   ciudad: string | null;
   varias_sucursales: boolean;
+  reserva_id: number | null;
   direccion_entrega: string | null;
   referencia_entrega: string | null;
   estado: EstadoVenta;
