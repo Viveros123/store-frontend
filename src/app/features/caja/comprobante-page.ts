@@ -44,6 +44,14 @@ export class ComprobantePage {
     });
   }
 
+  /** Cuánto se descontó en total por promociones (precio original − precio cobrado). */
+  ahorro(c: Comprobante): number {
+    return c.items.reduce(
+      (t, i) => t + (i.precio_original ? (+i.precio_original - +i.precio_unitario) * i.cantidad : 0),
+      0,
+    );
+  }
+
   imprimir(): void {
     window.print();
   }

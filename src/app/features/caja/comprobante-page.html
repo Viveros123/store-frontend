@@ -65,12 +65,24 @@
           <tr>
             <td>{{ item.producto }} <span class="sub">{{ item.talla }} · {{ item.color }}</span></td>
             <td>{{ item.cantidad }}</td>
-            <td>Bs {{ +item.precio_unitario | number: '1.2-2' }}</td>
+            <td>
+              @if (item.precio_original && +item.precio_original > +item.precio_unitario) {
+                <span class="precio-tachado">Bs {{ +item.precio_original | number: '1.2-2' }}</span>
+              }
+              Bs {{ +item.precio_unitario | number: '1.2-2' }}
+            </td>
             <td>Bs {{ +item.subtotal | number: '1.2-2' }}</td>
           </tr>
         }
       </tbody>
     </table>
+
+    @if (ahorro(c) > 0) {
+      <div class="descuento-linea">
+        <span>Ahorro por promociones</span>
+        <span>− Bs {{ ahorro(c) | number: '1.2-2' }}</span>
+      </div>
+    }
 
     <div class="total-linea">
       <span>Total</span>

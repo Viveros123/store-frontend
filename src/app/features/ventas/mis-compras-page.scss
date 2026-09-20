@@ -142,6 +142,13 @@
 .total {
   font-weight: 600;
   color: var(--fs-green-700);
+
+  .ahorro {
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--fs-oferta);
+    margin-left: 0.25rem;
+  }
 }
 
 .acciones {

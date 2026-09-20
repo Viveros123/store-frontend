@@ -37,6 +37,14 @@ export class MisComprasPage {
   private readonly location = inject(Location);
   private readonly snack = inject(MatSnackBar);
 
+  /** Cuánto se descontó en la compra por promociones (precio original − cobrado). */
+  protected ahorro(v: Venta): number {
+    return v.items.reduce(
+      (t, i) => t + (i.precio_original ? (+i.precio_original - +i.precio_unitario) * i.cantidad : 0),
+      0,
+    );
+  }
+
   protected readonly cargando = signal(true);
   protected readonly procesando = signal<number | null>(null);
   protected readonly ventas = signal<Venta[]>([]);

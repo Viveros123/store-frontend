@@ -45,6 +45,12 @@
             {{ item.producto }}
             <span class="detalle">{{ item.talla }} · {{ item.color }}</span>
             <span class="cant">×{{ item.cantidad }}</span>
+            <span class="cant">
+              @if (item.precio_original && +item.precio_original > +item.precio_unitario) {
+                <span class="precio-tachado">Bs {{ +item.precio_original | number: '1.2-2' }}</span>
+              }
+              Bs {{ +item.precio_unitario | number: '1.2-2' }} c/u
+            </span>
             @if (v.varias_sucursales) {
               <span class="detalle">desde {{ item.sucursal }}</span>
             }
@@ -52,7 +58,12 @@
         }
       </ul>
       <div class="pie">
-        <span class="total">Total Bs {{ +v.total | number: '1.2-2' }}</span>
+        <span class="total">
+          Total Bs {{ +v.total | number: '1.2-2' }}
+          @if (ahorro(v) > 0) {
+            <span class="ahorro">(ahorraste Bs {{ ahorro(v) | number: '1.2-2' }})</span>
+          }
+        </span>
         @if (v.estado === 'PENDIENTE_PAGO' && v.reserva_id) {
           <span class="total">Se cobra en caja</span>
         } @else if (v.estado === 'PENDIENTE_PAGO') {

@@ -94,6 +94,14 @@ header {
   }
 }
 
+.descuento-linea {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--fs-oferta);
+}
+
 .total-linea {
   display: flex;
   justify-content: space-between;
