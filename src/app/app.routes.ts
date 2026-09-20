@@ -299,6 +299,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'reportes-gestion',
+        loadComponent: () =>
+          import('./features/reportes/reportes-gestion-page').then(
+            (m) => m.ReportesGestionPage,
+          ),
+      },
+      {
         path: 'reportes',
         loadComponent: () =>
           import('./features/ia/reporte-voz-page').then(

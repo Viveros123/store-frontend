@@ -33,6 +33,11 @@ export class AdminLayout {
       link: '/admin/temporadas',
     },
     { label: 'Promociones', icon: 'local_offer', link: '/admin/promociones' },
+    {
+      label: 'Reportes de ventas e inventario',
+      icon: 'bar_chart',
+      link: '/admin/reportes-gestion',
+    },
     { label: 'Reportes (IA por voz)', icon: 'mic', link: '/admin/reportes' },
   ];
 }
