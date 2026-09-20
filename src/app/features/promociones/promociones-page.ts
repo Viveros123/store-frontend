@@ -82,7 +82,21 @@ export class PromocionesPage implements OnInit {
       : { texto: 'Vencida', clase: 'off' };
   }
 
-  nombresProductos(p: Promocion): string {
-    return p.productos.map((x) => x.nombre).join(', ');
+  resumenObjetivos(p: Promocion): string {
+    const partes: string[] = [];
+    if (p.productos.length > 0) {
+      partes.push(`${p.productos.length} ${p.productos.length === 1 ? 'producto' : 'productos'}`);
+    }
+    if (p.variantes.length > 0) {
+      partes.push(`${p.variantes.length} ${p.variantes.length === 1 ? 'variante' : 'variantes'}`);
+    }
+    return partes.join(' · ');
+  }
+
+  detalleObjetivos(p: Promocion): string {
+    return [
+      ...p.productos.map((x) => `${x.nombre} (todas las variantes)`),
+      ...p.variantes.map((v) => `${v.producto} — ${v.talla} · ${v.color}`),
+    ].join('\n');
   }
 }

@@ -51,6 +51,11 @@ body {
   color: var(--fs-oferta);
 }
 
+// Tooltip con varias líneas (detalle de los productos/variantes de una promoción).
+.tooltip-multilinea .mdc-tooltip__surface {
+  white-space: pre-line;
+}
+
 .etiqueta-oferta {
   display: inline-block;
   background: #fff7ed;

@@ -34,12 +34,13 @@
       @let vSel = varianteSeleccionada();
       @let precioNormal = vSel?.precio_efectivo ?? p.precio_base;
       @let precioPromo = vSel ? vSel.precio_promocional : p.precio_promocional;
+      @let etiquetaPromo = vSel ? vSel.promocion : p.promocion;
       <p class="precio">
         @if (precioPromo) {
           <span class="precio-tachado">Bs {{ +precioNormal | number: '1.2-2' }}</span>
           <span class="precio-oferta">Bs {{ +precioPromo | number: '1.2-2' }}</span>
-          @if (p.promocion) {
-            <span class="etiqueta-oferta">{{ p.promocion }}</span>
+          @if (etiquetaPromo) {
+            <span class="etiqueta-oferta">{{ etiquetaPromo }}</span>
           }
         } @else {
           Bs {{ +precioNormal | number: '1.2-2' }}

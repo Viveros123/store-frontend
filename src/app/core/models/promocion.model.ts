@@ -7,6 +7,17 @@ export interface ProductoPromocion {
   nombre: string;
 }
 
+export interface VariantePromocion {
+  id: number;
+  producto: string;
+  talla: string | null;
+  color: string | null;
+}
+
+export interface VarianteOpcion extends VariantePromocion {
+  producto_id: number;
+}
+
 export interface Promocion {
   id: number;
   nombre: string;
@@ -18,6 +29,7 @@ export interface Promocion {
   activo: boolean;
   vigente: boolean;
   productos: ProductoPromocion[];
+  variantes: VariantePromocion[];
 }
 
 export interface PromocionDto {
@@ -29,4 +41,5 @@ export interface PromocionDto {
   fecha_fin: string;
   activo: boolean;
   producto_ids: number[];
+  variante_ids: number[];
 }

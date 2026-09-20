@@ -3,13 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { Promocion, PromocionDto } from '../../core/models/promocion.model';
+import { Promocion, PromocionDto, VarianteOpcion } from '../../core/models/promocion.model';
 
 /** CU33 — Gestionar Promociones (Administrador). */
 @Injectable({ providedIn: 'root' })
 export class PromocionesService {
   private readonly http = inject(HttpClient);
   private readonly base = `${environment.apiUrl}/promociones`;
+
+  variantesOpciones(): Observable<VarianteOpcion[]> {
+    return this.http.get<VarianteOpcion[]>(`${this.base}/variantes/opciones`);
+  }
 
   listar(): Observable<Promocion[]> {
     return this.http.get<Promocion[]>(this.base);
