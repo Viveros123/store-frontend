@@ -9,6 +9,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../core/auth/auth.service';
 import { ROL } from '../../core/models/usuario.model';
 import { CarritoService } from '../carrito/carrito.service';
+import { ReservaBolsaService } from '../reservas/reserva-bolsa.service';
 
 @Component({
   selector: 'app-tienda-layout',
@@ -28,6 +29,7 @@ import { CarritoService } from '../carrito/carrito.service';
 export class TiendaLayout {
   private readonly auth = inject(AuthService);
   private readonly carritoSvc = inject(CarritoService);
+  private readonly reservaBolsa = inject(ReservaBolsaService);
 
   protected readonly usuario = this.auth.user;
   protected readonly esAdmin = () => this.auth.hasRole(ROL.ADMIN);
@@ -36,6 +38,7 @@ export class TiendaLayout {
   protected readonly esCajero = () => this.auth.hasRole(ROL.CAJERO);
   protected readonly esCliente = () => this.auth.hasRole(ROL.CLIENTE);
   protected readonly cantidadCarrito = this.carritoSvc.cantidadItems;
+  protected readonly cantidadReserva = this.reservaBolsa.cantidad;
 
   constructor() {
     if (this.esCliente()) {
@@ -45,6 +48,7 @@ export class TiendaLayout {
 
   salir(): void {
     this.carritoSvc.limpiarLocal();
+    this.reservaBolsa.limpiar();
     this.auth.logout();
   }
 }

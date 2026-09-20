@@ -25,6 +25,11 @@
       <button mat-button routerLink="/caja" class="hide-xs">Panel de caja</button>
     }
     @if (esCliente()) {
+      <a mat-icon-button routerLink="/mi-reserva" aria-label="Mi reserva">
+        <mat-icon [matBadge]="cantidadReserva() || null" matBadgeColor="accent" matBadgeSize="small">
+          event_available
+        </mat-icon>
+      </a>
       <a mat-icon-button routerLink="/carrito" aria-label="Mi carrito">
         <mat-icon [matBadge]="cantidadCarrito() || null" matBadgeColor="accent" matBadgeSize="small">
           shopping_bag
@@ -67,6 +72,9 @@
         </button>
         <button mat-menu-item routerLink="/mis-compras">
           <mat-icon>receipt_long</mat-icon> Mis compras
+        </button>
+        <button mat-menu-item routerLink="/mi-reserva">
+          <mat-icon>event_available</mat-icon> Mi reserva
         </button>
         <button mat-menu-item routerLink="/mis-reservas">
           <mat-icon>event_note</mat-icon> Mis reservas

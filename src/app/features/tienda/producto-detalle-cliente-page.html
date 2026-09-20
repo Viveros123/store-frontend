@@ -95,9 +95,9 @@
           class="btn-primario"
           [disabled]="disponibilidad().length === 0"
           [matTooltip]="disponibilidad().length === 0 ? 'Sin stock en sucursales por ahora' : ''"
-          (click)="reservar()"
+          (click)="agregarAReserva()"
         >
-          <mat-icon>event_available</mat-icon> Reservar para probar
+          <mat-icon>event_available</mat-icon> Agregar a mi reserva
         </button>
         <button
           mat-stroked-button

@@ -18,9 +18,9 @@ import { DisponibilidadSucursal } from '../../core/models/inventario.model';
 import { AuthService } from '../../core/auth/auth.service';
 import { ROL } from '../../core/models/usuario.model';
 import {
-  ReservarDialog,
-  ReservarDialogData,
-} from '../reservas/reservar-dialog';
+  AgregarReservaData,
+  AgregarReservaDialog,
+} from '../reservas/agregar-reserva-dialog';
 import { CarritoService } from '../carrito/carrito.service';
 
 @Component({
@@ -133,7 +133,7 @@ export class ProductoDetalleClientePage {
     this.tallaSel.set(tallaId);
   }
 
-  reservar(): void {
+  agregarAReserva(): void {
     if (!this.auth.isAuthenticated()) {
       void this.router.navigate(['/ingresar'], {
         queryParams: { returnUrl: this.router.url },
@@ -152,28 +152,26 @@ export class ProductoDetalleClientePage {
     const disponibles = this.disponibilidad();
     if (!variante || disponibles.length === 0) return;
 
-    const ref = this.dialog.open<ReservarDialog, ReservarDialogData>(
-      ReservarDialog,
+    const ref = this.dialog.open<AgregarReservaDialog, AgregarReservaData, boolean>(
+      AgregarReservaDialog,
       {
         data: {
           varianteId: variante.id,
           productoNombre: this.producto()?.nombre ?? '',
           talla: variante.talla,
           color: variante.color,
+          imagenUrl: variante.imagen_efectivo ?? this.producto()?.imagen_url ?? null,
           sucursales: disponibles,
         },
         autoFocus: 'first-tabbable',
       },
     );
-    ref.afterClosed().subscribe((res) => {
-      if (res) {
-        this.snack.open(
-          '¡Reserva confirmada! La vas a ver en "Mis reservas".',
-          'OK',
-          { duration: 4000 },
-        );
-        // refresca la disponibilidad mostrada (bajó el stock reservado)
-        this.tienda.disponibilidad(variante.id).subscribe((d) => this.disponibilidad.set(d));
+    ref.afterClosed().subscribe((agregada) => {
+      if (agregada) {
+        this.snack
+          .open('Agregada a tu reserva.', 'Ver mi reserva', { duration: 4000 })
+          .onAction()
+          .subscribe(() => void this.router.navigate(['/mi-reserva']));
       }
     });
   }
