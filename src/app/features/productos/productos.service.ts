@@ -31,6 +31,12 @@ export interface VarianteCreate {
   precio?: string | null;
   precio_compra?: string | null;
   imagen_url?: string | null;
+  /** CU20 — vestidor virtual: PNG transparente y anclas de hombro (0 a 1). */
+  imagen_ar_url?: string | null;
+  ancla_izq_x?: string | null;
+  ancla_izq_y?: string | null;
+  ancla_der_x?: string | null;
+  ancla_der_y?: string | null;
 }
 
 export type VarianteUpdate = Partial<VarianteCreate>;

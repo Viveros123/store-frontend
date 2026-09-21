@@ -33,6 +33,11 @@ export interface Variante {
   precio_compra_efectivo: string | null;
   imagen_url: string | null;
   imagen_efectivo: string | null;
+  imagen_ar_url: string | null;
+  ancla_izq_x: string | null;
+  ancla_izq_y: string | null;
+  ancla_der_x: string | null;
+  ancla_der_y: string | null;
 }
 
 export interface ProductoDetalle extends Producto {

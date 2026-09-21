@@ -92,6 +92,34 @@ export interface VarianteDialogData {
           <mat-hint>Para este color/talla en particular. Si la dejás vacía, usa la imagen del producto.</mat-hint>
         </mat-form-field>
 
+        <h3 class="col-2 sub">Vestidor virtual (opcional)</h3>
+        <mat-form-field appearance="outline" class="col-2">
+          <mat-label>URL de la imagen para el vestidor (PNG transparente)</mat-label>
+          <input matInput formControlName="imagen_ar_url" placeholder="https://…/polera.png" />
+          <mat-hint>Prenda de frente, con fondo transparente. Si la dejás vacía, esta variante no aparece en el vestidor.</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hombro izquierdo · X (0 a 1)</mat-label>
+          <input matInput type="number" step="0.001" min="0" max="1" formControlName="ancla_izq_x" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Hombro izquierdo · Y (0 a 1)</mat-label>
+          <input matInput type="number" step="0.001" min="0" max="1" formControlName="ancla_izq_y" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Hombro derecho · X (0 a 1)</mat-label>
+          <input matInput type="number" step="0.001" min="0" max="1" formControlName="ancla_der_x" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Hombro derecho · Y (0 a 1)</mat-label>
+          <input matInput type="number" step="0.001" min="0" max="1" formControlName="ancla_der_y" />
+        </mat-form-field>
+        <p class="col-2 nota">
+          Posición de los hombros dentro de la imagen, como fracción del ancho (X) y del alto (Y).
+          Si los dejás vacíos se usan valores por defecto (0.27 / 0.73 de ancho y 0.15 de alto).
+        </p>
+
         @if (error()) {
           <p class="err col-2">{{ error() }}</p>
         }
@@ -110,6 +138,8 @@ export interface VarianteDialogData {
     mat-form-field { width: 100%; }
     .sw { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:.4rem; border:1px solid #cbd5e1; vertical-align:middle; }
     .err { color:#b3261e; font-size:.85rem; margin:0; }
+    .sub { margin: .6rem 0 0; font-size: .95rem; font-weight: 600; }
+    .nota { margin: -.2rem 0 0; font-size: .78rem; color: #64748b; }
     @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } .col-2 { grid-column: auto; } }
   `,
 })
@@ -143,7 +173,18 @@ export class VarianteDialog {
     precio: [this.v?.precio ?? ''],
     precio_compra: [this.v?.precio_compra ?? ''],
     imagen_url: [this.v?.imagen_url ?? ''],
+    imagen_ar_url: [this.v?.imagen_ar_url ?? ''],
+    ancla_izq_x: [this.v?.ancla_izq_x ?? ''],
+    ancla_izq_y: [this.v?.ancla_izq_y ?? ''],
+    ancla_der_x: [this.v?.ancla_der_x ?? ''],
+    ancla_der_y: [this.v?.ancla_der_y ?? ''],
   });
+
+  /** Ancla de hombro: vacío = null (la app usa su valor por defecto). */
+  private ancla(valor: string | number | null | undefined): string | null {
+    const s = String(valor ?? '').trim();
+    return s === '' ? null : s;
+  }
 
   async guardar(): Promise<void> {
     if (this.form.invalid || this.guardando()) {
@@ -160,6 +201,11 @@ export class VarianteDialog {
       precio: val.precio ? String(val.precio) : null,
       precio_compra: val.precio_compra ? String(val.precio_compra) : null,
       imagen_url: val.imagen_url?.trim() || null,
+      imagen_ar_url: val.imagen_ar_url?.trim() || null,
+      ancla_izq_x: this.ancla(val.ancla_izq_x),
+      ancla_izq_y: this.ancla(val.ancla_izq_y),
+      ancla_der_x: this.ancla(val.ancla_der_x),
+      ancla_der_y: this.ancla(val.ancla_der_y),
     };
     try {
       const res = this.v
