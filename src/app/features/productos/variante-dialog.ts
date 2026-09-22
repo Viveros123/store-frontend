@@ -133,9 +133,13 @@ export interface VarianteDialogData {
     </mat-dialog-actions>
   `,
   styles: `
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem 1rem; padding-top: .5rem; min-width: min(480px, 82vw); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 1rem; padding-top: .5rem; min-width: min(480px, 82vw); }
     .col-2 { grid-column: 1 / -1; }
     mat-form-field { width: 100%; }
+    /* Angular Material reserva una sola línea para el texto de ayuda (mat-hint);
+       si el texto ocupa dos líneas, se sale de ahí y tapa lo de abajo. Se deja
+       que crezca según haga falta, y el "gap" de arriba ya le da lugar. */
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper { height: auto; }
     .sw { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:.4rem; border:1px solid #cbd5e1; vertical-align:middle; }
     .err { color:#b3261e; font-size:.85rem; margin:0; }
     .sub { margin: .6rem 0 0; font-size: .95rem; font-weight: 600; }
