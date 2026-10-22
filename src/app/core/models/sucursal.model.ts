@@ -1,5 +1,6 @@
 export interface Sucursal {
   id: number;
+  empresa_id: number;
   nombre: string;
   ciudad: string;
   direccion: string;

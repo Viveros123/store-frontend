@@ -19,7 +19,32 @@ export const authGuard: CanActivateFn = (_route, state) => {
 export const adminGuard: CanActivateFn = (_route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);
+  if (auth.hasRole(ROL.ADMIN, ROL.SUPERADMIN)) return true;
+  if (auth.isAuthenticated()) return router.createUrlTree(['/']);
+  return router.createUrlTree(['/ingresar'], {
+    queryParams: { returnUrl: state.url },
+  });
+};
+
+/** El resumen de plan pertenece al Administrador de un tenant, no al global. */
+export const companyAdminGuard: CanActivateFn = (_route, state) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
   if (auth.hasRole(ROL.ADMIN)) return true;
+  if (auth.hasRole(ROL.SUPERADMIN)) {
+    return router.createUrlTree(['/plataforma/empresas']);
+  }
+  if (auth.isAuthenticated()) return router.createUrlTree(['/']);
+  return router.createUrlTree(['/ingresar'], {
+    queryParams: { returnUrl: state.url },
+  });
+};
+
+/** Requiere el rol global de Superadministrador de plataforma. */
+export const superadminGuard: CanActivateFn = (_route, state) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  if (auth.hasRole(ROL.SUPERADMIN)) return true;
   if (auth.isAuthenticated()) return router.createUrlTree(['/']);
   return router.createUrlTree(['/ingresar'], {
     queryParams: { returnUrl: state.url },
@@ -75,6 +100,7 @@ export const noAuthGuard: CanActivateFn = () => {
 export const redirectStaffGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
+  if (auth.hasRole(ROL.SUPERADMIN)) return router.createUrlTree(['/plataforma/empresas']);
   if (auth.hasRole(ROL.ADMIN)) return router.createUrlTree(['/admin/usuarios']);
   if (auth.hasRole(ROL.PROVEEDOR)) return router.createUrlTree(['/proveedor/productos']);
   if (auth.hasRole(ROL.ENCARGADO)) return router.createUrlTree(['/encargado/reservas']);

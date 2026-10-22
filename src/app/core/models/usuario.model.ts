@@ -6,6 +6,7 @@ export interface Usuario {
   telefono: string | null;
   rol_id: number;
   rol: string | null;
+  empresa_id: number | null;
   sucursal_id: number | null;
   proveedor_id: number | null;
   activo: boolean;
@@ -26,6 +27,7 @@ export interface Page<T> {
 
 /** Nombres de rol tal como los devuelve el backend. */
 export const ROL = {
+  SUPERADMIN: 'Superadministrador',
   CLIENTE: 'Cliente',
   ADMIN: 'Administrador',
   ENCARGADO: 'EncargadoSucursal',

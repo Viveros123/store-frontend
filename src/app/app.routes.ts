@@ -4,10 +4,12 @@ import {
   adminGuard,
   authGuard,
   cajeroGuard,
+  companyAdminGuard,
   encargadoGuard,
   noAuthGuard,
   proveedorGuard,
   redirectStaffGuard,
+  superadminGuard,
 } from './core/auth/auth.guard';
 
 export const routes: Routes = [
@@ -105,6 +107,32 @@ export const routes: Routes = [
     canActivate: [noAuthGuard],
     loadComponent: () =>
       import('./features/identidad/registro/registro').then((m) => m.Registro),
+  },
+  {
+    path: 'plataforma',
+    canActivate: [superadminGuard],
+    loadComponent: () =>
+      import('./features/saas/platform-layout').then((m) => m.PlatformLayout),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'empresas' },
+      {
+        path: 'empresas',
+        loadComponent: () =>
+          import('./features/saas/empresas-page').then((m) => m.EmpresasPage),
+      },
+      {
+        path: 'planes',
+        loadComponent: () =>
+          import('./features/saas/planes-page').then((m) => m.PlanesPage),
+      },
+      {
+        path: 'suscripciones',
+        loadComponent: () =>
+          import('./features/saas/suscripciones-page').then(
+            (m) => m.SuscripcionesPage,
+          ),
+      },
+    ],
   },
   {
     path: 'proveedor',
@@ -214,6 +242,12 @@ export const routes: Routes = [
       import('./features/admin/admin-layout').then((m) => m.AdminLayout),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'usuarios' },
+      {
+        path: 'mi-plan',
+        canActivate: [companyAdminGuard],
+        loadComponent: () =>
+          import('./features/saas/mi-plan-page').then((m) => m.MiPlanPage),
+      },
       {
         path: 'usuarios',
         loadComponent: () =>

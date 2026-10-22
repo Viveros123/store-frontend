@@ -1,19 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { AuthService } from '../../core/auth/auth.service';
+import { ROL } from '../../core/models/usuario.model';
 import { NavItem, PanelShell } from '../shared/panel-shell';
 
 @Component({
   selector: 'app-admin-layout',
   imports: [RouterOutlet, PanelShell],
   template: `
-    <app-panel-shell etiqueta="Administración" [nav]="nav">
+    <app-panel-shell etiqueta="Administración" [nav]="nav()">
       <router-outlet />
     </app-panel-shell>
   `,
 })
 export class AdminLayout {
-  protected readonly nav: NavItem[] = [
+  private readonly auth = inject(AuthService);
+
+  protected readonly nav = computed<NavItem[]>(() => [
+    ...(this.auth.hasRole(ROL.SUPERADMIN)
+      ? [{ label: 'Volver a plataforma SaaS', icon: 'arrow_back', link: '/plataforma/empresas' }]
+      : [{ label: 'Mi plan y consumo', icon: 'workspace_premium', link: '/admin/mi-plan' }]),
     { label: 'Usuarios', icon: 'group', link: '/admin/usuarios' },
     { label: 'Sucursales', icon: 'store', link: '/admin/sucursales' },
     { label: 'Proveedores', icon: 'local_shipping', link: '/admin/proveedores' },
@@ -39,5 +46,5 @@ export class AdminLayout {
       link: '/admin/reportes-gestion',
     },
     { label: 'Reportes (IA por voz)', icon: 'mic', link: '/admin/reportes' },
-  ];
+  ]);
 }
