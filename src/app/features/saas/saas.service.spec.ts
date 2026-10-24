@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http/testing';
 
 import { environment } from '../../../environments/environment';
-import { PlanConsumo } from '../../core/models/saas.model';
+import { CambioPlanDto, PlanConsumo } from '../../core/models/saas.model';
 import { RegistrarEmpresaDto, SaasService } from './saas.service';
 
 describe('SaasService', () => {
@@ -51,5 +51,15 @@ describe('SaasService', () => {
     expect(req.request.method).toBe('GET');
     expect(req.request.params.keys()).toEqual([]);
     req.flush({ empresa_id: 7 } as PlanConsumo);
+  });
+
+  it('envía una clave de idempotencia al cambiar o renovar el plan', () => {
+    const dto: CambioPlanDto = { plan_id: 2, vigencia_meses: 3 };
+    service.cambiarPlan(dto, 'cambio-unico-123').subscribe();
+    const req = http.expectOne(`${environment.apiUrl}/suscripciones/cambiar-plan`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.headers.get('Idempotency-Key')).toBe('cambio-unico-123');
+    expect(req.request.body).toEqual(dto);
+    req.flush({});
   });
 });

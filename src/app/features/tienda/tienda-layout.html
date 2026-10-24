@@ -7,6 +7,7 @@
   <nav class="fs-nav">
     <a routerLink="/" routerLinkActive="on" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
     <a routerLink="/catalogo" routerLinkActive="on">Catálogo</a>
+    @if (usuario()) { <a routerLink="/offline" routerLinkActive="on">Sin conexión</a> }
   </nav>
 
   <span class="flex-1"></span>

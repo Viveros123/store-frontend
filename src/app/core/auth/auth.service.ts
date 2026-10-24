@@ -1,5 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
@@ -12,6 +13,8 @@ interface LoginResponse {
   token_type: string;
   usuario: Usuario;
 }
+
+const OFFLINE_USER_KEY = 'fs_offline_user';
 
 export interface RegistroClienteDto {
   nombre: string;
@@ -58,7 +61,7 @@ export class AuthService {
       }),
     );
     this.tokens.set(res.access_token);
-    this._user.set(res.usuario);
+    this.setUser(res.usuario);
     return res.usuario;
   }
 
@@ -68,21 +71,30 @@ export class AuthService {
       this.http.post<LoginResponse>(`${environment.apiUrl}/auth/registro`, dto),
     );
     this.tokens.set(res.access_token);
-    this._user.set(res.usuario);
+    this.setUser(res.usuario);
     return res.usuario;
   }
 
   /** Se llama al iniciar la app: si hay token guardado, recupera el usuario. */
   async restoreSession(): Promise<void> {
     if (!this.tokens.get()) return;
+    const cachedUser = this.getCachedUser();
+    if (!navigator.onLine && cachedUser) {
+      this._user.set(cachedUser);
+      return;
+    }
     try {
       const u = await firstValueFrom(
         this.http.get<Usuario>(`${environment.apiUrl}/auth/me`),
       );
-      this._user.set(u);
-    } catch {
+      this.setUser(u);
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 0 && cachedUser) {
+        this._user.set(cachedUser);
+        return;
+      }
       this.tokens.clear();
-      this._user.set(null);
+      this.clearUser();
     }
   }
 
@@ -91,7 +103,7 @@ export class AuthService {
     const u = await firstValueFrom(
       this.http.patch<Usuario>(`${environment.apiUrl}/auth/me`, dto),
     );
-    this._user.set(u);
+    this.setUser(u);
     return u;
   }
 
@@ -104,7 +116,40 @@ export class AuthService {
 
   logout(): void {
     this.tokens.clear();
-    this._user.set(null);
+    this.clearUser();
     void this.router.navigate(['/ingresar']);
+  }
+
+  private setUser(user: Usuario): void {
+    this._user.set(user);
+    try {
+      localStorage.setItem(OFFLINE_USER_KEY, JSON.stringify(user));
+    } catch {
+      /* almacenamiento privado o bloqueado */
+    }
+  }
+
+  private clearUser(): void {
+    this._user.set(null);
+    try {
+      localStorage.removeItem(OFFLINE_USER_KEY);
+    } catch {
+      /* noop */
+    }
+  }
+
+  private getCachedUser(): Usuario | null {
+    try {
+      const value = localStorage.getItem(OFFLINE_USER_KEY);
+      if (!value) return null;
+      const user = JSON.parse(value) as Partial<Usuario>;
+      if (!Number.isInteger(user.id) || typeof user.email !== 'string' || typeof user.activo !== 'boolean') {
+        localStorage.removeItem(OFFLINE_USER_KEY);
+        return null;
+      }
+      return user as Usuario;
+    } catch {
+      return null;
+    }
   }
 }

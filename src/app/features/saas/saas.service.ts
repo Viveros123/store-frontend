@@ -4,9 +4,13 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import {
+  CambioPlanDto,
+  CambioPlanPreview,
+  CambioPlanResultado,
   Empresa,
   EmpresaPage,
   FuncionalidadPlan,
+  HistorialCambioPlan,
   LimitePlan,
   Plan,
   PlanConsumo,
@@ -97,5 +101,33 @@ export class SaasService {
 
   miPlan(): Observable<PlanConsumo> {
     return this.http.get<PlanConsumo>(`${this.base}/suscripciones/mi-plan`);
+  }
+
+  validarCambio(dto: CambioPlanDto): Observable<CambioPlanPreview> {
+    return this.http.post<CambioPlanPreview>(
+      `${this.base}/suscripciones/validar-cambio`,
+      dto,
+    );
+  }
+
+  cambiarPlan(
+    dto: CambioPlanDto,
+    idempotencyKey: string,
+  ): Observable<CambioPlanResultado> {
+    return this.http.put<CambioPlanResultado>(
+      `${this.base}/suscripciones/cambiar-plan`,
+      dto,
+      { headers: { 'Idempotency-Key': idempotencyKey } },
+    );
+  }
+
+  historialCambios(empresaId?: number): Observable<HistorialCambioPlan[]> {
+    const params = empresaId == null
+      ? undefined
+      : new HttpParams().set('empresa_id', empresaId);
+    return this.http.get<HistorialCambioPlan[]>(
+      `${this.base}/suscripciones/historial`,
+      { params },
+    );
   }
 }

@@ -71,3 +71,57 @@ export interface PlanConsumo {
   funcionalidades: FuncionalidadPlan[];
   consumos: ConsumoPlan[];
 }
+
+export interface CambioPlanDto {
+  empresa_id?: number;
+  plan_id: number;
+  vigencia_meses: number;
+  observacion?: string | null;
+}
+
+export interface IncompatibilidadPlan {
+  codigo: string;
+  etiqueta: string;
+  utilizado: number | null;
+  limite: number;
+  mensaje: string;
+}
+
+export interface CambioPlanPreview {
+  empresa_id: number;
+  suscripcion_id: number;
+  plan_actual: Plan;
+  plan_nuevo: Plan;
+  tipo_cambio: 'CAMBIO' | 'RENOVACION';
+  fecha_inicio_nueva: string;
+  fecha_vencimiento_nueva: string;
+  compatible: boolean;
+  incompatibilidades: IncompatibilidadPlan[];
+}
+
+export interface CambioPlanResultado {
+  suscripcion: Suscripcion;
+  tipo_cambio: 'CAMBIO' | 'RENOVACION';
+  plan_anterior_id: number;
+  plan_anterior_nombre: string;
+  plan_nuevo_id: number;
+  plan_nuevo_nombre: string;
+  fecha_inicio_nueva: string;
+  fecha_vencimiento_nueva: string;
+  idempotente: boolean;
+}
+
+export interface HistorialCambioPlan {
+  id: number;
+  suscripcion_id: number;
+  plan_anterior_id: number | null;
+  plan_anterior_nombre: string | null;
+  plan_nuevo_id: number;
+  plan_nuevo_nombre: string;
+  usuario_id: number;
+  tipo_cambio: string;
+  observacion: string | null;
+  fecha_inicio_nueva: string | null;
+  fecha_vencimiento_nueva: string | null;
+  fecha_cambio: string;
+}

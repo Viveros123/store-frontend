@@ -1,0 +1,19 @@
+{
+  "name": "FashionStore",
+  "short_name": "FashionStore",
+  "description": "Gestión y catálogo multiempresa de FashionStore",
+  "lang": "es-BO",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#166534",
+  "icons": [
+    {
+      "src": "/icons/fashionstore-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

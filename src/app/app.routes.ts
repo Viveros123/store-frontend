@@ -32,6 +32,12 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'offline',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/offline/offline-page').then((m) => m.OfflinePage),
+      },
+      {
         path: 'catalogo/:id',
         loadComponent: () =>
           import('./features/tienda/producto-detalle-cliente-page').then(

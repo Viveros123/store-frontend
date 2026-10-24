@@ -1,0 +1,66 @@
+<main class="offline-page">
+  <header class="page-head">
+    <div>
+      <h1>Catálogo sin conexión</h1>
+      <p>Prepará una copia local autorizada para consultar prendas aunque falle Internet.</p>
+    </div>
+    <span class="estado" [class.sin-conexion]="!online()">
+      <mat-icon>{{ online() ? 'wifi' : 'wifi_off' }}</mat-icon>
+      {{ online() ? 'Servidor disponible' : 'Sin acceso al servidor' }}
+    </span>
+  </header>
+
+  @if (cargando() || sincronizando()) {
+    <mat-progress-bar mode="indeterminate" />
+    <p>{{ sincronizando() ? 'Descargando y guardando datos…' : 'Leyendo datos locales…' }}</p>
+  }
+
+  <section class="acciones">
+    <mat-form-field appearance="outline">
+      <mat-label>Sucursal</mat-label>
+      <mat-select [value]="sucursalId()" (valueChange)="cambiarSucursal($event)" [disabled]="sincronizando()">
+        @for (s of sucursales(); track s.id) {
+          <mat-option [value]="s.id">{{ s.nombre }} — {{ s.ciudad }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button mat-flat-button class="btn-primary" (click)="sincronizar()"
+      [disabled]="sincronizando() || sucursalId() == null">
+      <mat-icon>sync</mat-icon> {{ copia() ? 'Actualizar datos' : 'Preparar datos' }}
+    </button>
+  </section>
+
+  @if (error()) { <div class="mensaje error" role="alert">{{ error() }}</div> }
+  @if (exito()) { <div class="mensaje exito">{{ exito() }}</div> }
+
+  @if (copia(); as local) {
+    <section class="aviso">
+      <mat-icon>info</mat-icon>
+      <div><strong>Los datos y existencias pueden estar desactualizados.</strong><br />Última sincronización: {{ local.guardado_en | date:'dd/MM/yyyy HH:mm' }} · {{ local.sucursal_nombre }}</div>
+    </section>
+
+    <section class="filtros">
+      <mat-form-field appearance="outline"><mat-label>Buscar</mat-label><input matInput [formControl]="qCtrl" placeholder="Nombre, categoría o SKU" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Talla</mat-label><mat-select [formControl]="tallaCtrl"><mat-option value="">Todas</mat-option>@for (t of tallas(); track t) { <mat-option [value]="t">{{ t }}</mat-option> }</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Color</mat-label><mat-select [formControl]="colorCtrl"><mat-option value="">Todos</mat-option>@for (c of colores(); track c) { <mat-option [value]="c">{{ c }}</mat-option> }</mat-select></mat-form-field>
+    </section>
+
+    @if (variantes().length) {
+      <section class="grid">
+        @for (v of variantes(); track v.id) {
+          <article class="producto">
+            @if (v.imagen) { <img [src]="v.imagen" [alt]="v.producto_nombre" /> }
+            <small>{{ v.categoria }}</small><h2>{{ v.producto_nombre }}</h2>
+            <p>{{ v.talla }} · {{ v.color }} · {{ v.sku }}</p>
+            <strong>{{ v.precio | currency:'BOB':'symbol-narrow':'1.2-2' }}</strong>
+            <span>Última disponibilidad: {{ v.cantidad_disponible }}</span>
+          </article>
+        }
+      </section>
+    } @else {
+      <div class="vacio"><mat-icon>search_off</mat-icon><p>No existen productos locales para los filtros seleccionados.</p></div>
+    }
+  } @else if (!cargando()) {
+    <div class="vacio"><mat-icon>cloud_off</mat-icon><p>No existen datos locales. Conectate a Internet, seleccioná una sucursal y presioná “Preparar datos”.</p></div>
+  }
+</main>
