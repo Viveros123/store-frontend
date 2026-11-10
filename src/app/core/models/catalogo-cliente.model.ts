@@ -29,6 +29,9 @@ export interface CatalogoVariante {
   precio_efectivo: string;
   precio_promocional: string | null;
   promocion: string | null;
+  // CU53 — venta al por mayor: null si esta variante no tiene regla vigente.
+  mayoreo_cantidad_minima: number | null;
+  mayoreo_porcentaje: string | null;
   imagen_efectivo: string | null;
 }
 

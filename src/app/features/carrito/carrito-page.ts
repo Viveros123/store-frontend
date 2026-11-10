@@ -57,7 +57,7 @@ export class CarritoPage {
 
   cambiarCantidad(item: ItemCarrito, delta: number): void {
     const nueva = item.cantidad + delta;
-    if (nueva < 1 || nueva > 20) return;
+    if (nueva < 1 || nueva > 500) return;
     this.actualizando.set(item.id);
     this.service.actualizarCantidad(item.id, { cantidad: nueva }).subscribe({
       next: () => this.actualizando.set(null),

@@ -50,6 +50,10 @@
             </span>
             @if (item.promocion) {
               <span class="etiqueta-oferta">{{ item.promocion }}</span>
+            } @else if (item.descuento_mayorista; as m) {
+              <span class="etiqueta-oferta">
+                Mayoreo: -{{ +m.porcentaje_descuento | number: '1.0-2' }}%
+              </span>
             }
           </div>
 
@@ -64,7 +68,7 @@
             <span>{{ item.cantidad }}</span>
             <button
               mat-icon-button
-              [disabled]="actualizando() === item.id || item.cantidad >= 20"
+              [disabled]="actualizando() === item.id || item.cantidad >= 500"
               (click)="cambiarCantidad(item, 1)"
             >
               <mat-icon>add</mat-icon>

@@ -47,6 +47,14 @@
         }
       </p>
 
+      @if (vSel?.mayoreo_cantidad_minima) {
+        <p class="aviso-mayoreo">
+          <mat-icon>local_shipping</mat-icon>
+          Venta al por mayor: {{ +vSel!.mayoreo_porcentaje! | number: '1.0-2' }}% de descuento
+          llevando {{ vSel!.mayoreo_cantidad_minima }} unidades o más de esta talla/color.
+        </p>
+      }
+
       @if (p.temporada || p.coleccion) {
         <p class="meta">
           @if (p.coleccion) { {{ p.coleccion }} }

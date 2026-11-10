@@ -1,3 +1,8 @@
+export interface DescuentoMayoristaAplicado {
+  cantidad_minima: number;
+  porcentaje_descuento: string;
+}
+
 export interface ItemCarrito {
   id: number;
   variante_id: number;
@@ -10,6 +15,8 @@ export interface ItemCarrito {
   precio_unitario: string | null;
   precio_original: string | null;
   promocion: string | null;
+  // CU53 — venta al por mayor: presente cuando la cantidad ya alcanzó el mínimo.
+  descuento_mayorista: DescuentoMayoristaAplicado | null;
   cantidad: number;
   subtotal: string | null;
   disponible: boolean;

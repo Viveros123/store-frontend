@@ -49,6 +49,7 @@ export class AdminLayout {
       link: '/admin/temporadas',
     },
     { label: 'Promociones', icon: 'local_offer', link: '/admin/promociones' },
+    { label: 'Ventas al por mayor', icon: 'inventory', link: '/admin/mayoreo' },
     {
       label: 'Analítica inteligente',
       icon: 'auto_graph',

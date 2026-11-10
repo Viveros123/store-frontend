@@ -474,6 +474,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'mayoreo',
+        loadComponent: () =>
+          import('./features/mayoreo/mayoreo-page').then(
+            (m) => m.MayoreoPage,
+          ),
+      },
+      {
         path: 'reportes-gestion',
         loadComponent: () =>
           import('./features/reportes/reportes-gestion-page').then(
